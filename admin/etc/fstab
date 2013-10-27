@@ -1,0 +1,1 @@
+fileserver:/home/motion/garage	/srv/motion	nfs4	soft,bg,timeo=14,intr	0	0
