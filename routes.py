@@ -22,8 +22,8 @@ def error(error):
 def show_status():
     return template('index')
 
-@application.post('/<door_idx:int>/door')
-def fire_remote(door_idx):
+@application.post('/<door_idx:int>/command/<command_id:int>')
+def fire_remote(door_idx, command_id):
 	# TODO Currently we ignore the door index, it's here to support multiple doors in the future
 	GPIO.setmode(GPIO.BOARD)
 	GPIO.setup(11, GPIO.OUT, initial=GPIO.LOW)
