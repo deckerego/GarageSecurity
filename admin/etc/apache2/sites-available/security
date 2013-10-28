@@ -1,11 +1,23 @@
 <VirtualHost *:80>
+	WSGIDaemonProcess security user=www-data group=www-data processes=1 threads=1
+	WSGIScriptAlias /security /srv/security/routes.py
+
 	ServerAdmin webmaster@localhost
 
-	DocumentRoot /srv/motion
+	Alias /media /srv/motion
 
 	<Directory />
 		Options FollowSymLinks
 		AllowOverride None
+	</Directory>
+
+	<Directory /srv/security/>
+		Options Indexes Multiviews
+        	AllowOverride AuthConfig Limit
+        	Order allow,deny
+        	Allow from all
+        	WSGIProcessGroup security 
+        	WSGIApplicationGroup %{GLOBAL}
 	</Directory>
 
 	<Directory /srv/motion/>

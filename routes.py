@@ -7,31 +7,26 @@ import sys
 os.chdir(os.path.dirname(__file__))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), ".")))
 
-import RPi.GPIO as GPIO
+import wiringpi
 import time
 from config import configuration
-from bottle import Bottle, error, template
+from bottle import Bottle, get, post, request, template
 
 application = Bottle()
-
-@Bottle.error(application)
-def error(error):
-	return '{ "error": "%s" }' % 'An unexpected error has occurred'
 
 @application.get('/')
 def show_status():
     return template('index')
 
-@application.post('/<door_idx:int>/command/<command_id:int>')
-def fire_remote(door_idx, command_id):
-	# TODO Currently we ignore the door index, it's here to support multiple doors in the future
-	GPIO.setmode(GPIO.BOARD)
-	GPIO.setup(11, GPIO.OUT, initial=GPIO.LOW)
+@application.post('/<station_id:int>/command/<command_id:int>')
+def execute_command(station_id, command_id):
+	# TODO Currently we ignore the station, it's here to support multiple instances in the future
+	io = wiringpi.GPIO(wiringpi.GPIO.WPI_MODE_SYS)
+	io.pinMode(17, io.OUTPUT)
+	io.digitalWrite(17, io.HIGH)
 
-	GPIO.output(11, GPIO.HIGH)
-	time.sleep(0.05)
-	GPIO.output(11, GPIO.LOW)
+	time.sleep(1)
+	io.digitalWrite(17, io.LOW)
 
-	GPIO.cleanup()
+	show_status()
 
-	return template('index')
