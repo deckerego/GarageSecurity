@@ -4,7 +4,7 @@
 
 	ServerAdmin webmaster@localhost
 
-	Alias /media /srv/motion
+	Alias /media /srv/motion   
 
 	<Directory />
 		Options FollowSymLinks
