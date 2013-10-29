@@ -14,6 +14,10 @@ from bottle import Bottle, get, post, request, template
 
 application = Bottle()
 
+@application.route('/js/<filename:path>')
+def send_static(filename):
+    return static_file(filename, root='views/js')
+
 @application.get('/')
 def show_status():
     return template('index')

@@ -1,9 +1,16 @@
-<html lang="en">
+<!DOCTYPE html>
+<html>
 	<head>
-		<title>GarageSecurity</title>
+		<meta charset="utf-8" />
+		<script type="text/javascript" src="js/mjpeg_viewer.js"></script>
+		<script type="text/javascript" type="text/javascript">
+			function renderCameras() {
+				render('camera0', "http://localhost:8081");
+			}
+		</script>
 	</head>
 
-	<body>
-		Hello World!
+	<body onload="renderCameras();">
+		<canvas id="camera0" width="1280" height="720"></canvas>
 	</body>
 </html>
