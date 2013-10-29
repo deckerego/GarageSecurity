@@ -12,12 +12,16 @@ setup(
     url='https://github.com/deckerego/GarageSecurity',
     packages=[''],
     long_description=open('README.md').read(),
-    data_files=[('views', [os.path.join('views', 'index.tpl')])],
+    data_files=[
+        ('views',    [os.path.join('views', 'index.tpl')]),
+        ('views/js', [os.path.join('views/js', 'mjpeg_viewer.js')]),
+        ('views/css',[os.path.join('views/css', 'styles.css')])
+    ],
     classifiers=[
     	"License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
     	"Programming Language :: Python",
-    	"Development Status :: 1 - Planning",
-    	"Intended Audience :: End Users/Desktop",
+    	"Development Status :: 3 - Alpha",
+        "Intended Audience :: End Users/Desktop",
     	"Topic :: Home Automation"
     ],
     keywords='motion security surveillance garage remote raspberrypi',

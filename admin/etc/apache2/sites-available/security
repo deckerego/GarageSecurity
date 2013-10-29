@@ -4,7 +4,7 @@
 
 	ServerAdmin webmaster@localhost
 
-	Alias /media /srv/motion   
+	Alias /media /srv/motion
 
 	<Directory />
 		Options FollowSymLinks
@@ -13,11 +13,11 @@
 
 	<Directory /srv/security/>
 		Options Indexes Multiviews
-        	AllowOverride AuthConfig Limit
-        	Order allow,deny
-        	Allow from all
-        	WSGIProcessGroup security 
-        	WSGIApplicationGroup %{GLOBAL}
+        AllowOverride AuthConfig Limit
+        Order allow,deny
+        Allow from all
+        WSGIProcessGroup security 
+        WSGIApplicationGroup %{GLOBAL}
 	</Directory>
 
 	<Directory /srv/motion/>
@@ -26,6 +26,15 @@
 		Order allow,deny
 		allow from all
 	</Directory>
+
+	ProxyPass /camera0 http://localhost:8081
+
+	<Location /camera0>
+		Options Indexes FollowSymLinks MultiViews
+		AllowOverride None
+		Order allow,deny
+		allow from all
+	</Location>
 
 	ErrorLog ${APACHE_LOG_DIR}/error.log
 
