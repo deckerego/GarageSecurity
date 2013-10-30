@@ -14,7 +14,14 @@
 	</head>
 
 	<body>
-		<canvas id="camera0" width="1280" height="720"></canvas>
+		<div class="wrapper">
+			<div class="container">
+				<div class="canvas-container">
+					<canvas id="camera0" width="1280" height="720"></canvas>
+				</div>
+			</div>
+		</div>
+		
 		<button onClick="executeCommand();">Open or Close Door</button>
 
 		<script type="text/javascript">
