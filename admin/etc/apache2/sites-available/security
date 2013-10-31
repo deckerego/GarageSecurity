@@ -4,6 +4,8 @@
 
 	ServerAdmin webmaster@localhost
 
+	RedirectMatch 302 ^/$ /security/
+
 	Alias /media /srv/motion
 
 	<Directory />
