@@ -8,33 +8,43 @@
 
 	Alias /media /srv/motion
 
+	AddExternalAuth pwauth /usr/sbin/pwauth
+	SetExternalAuthMethod pwauth pipe
+
 	<Directory />
 		Options FollowSymLinks
 		AllowOverride None
 	</Directory>
 
 	<Directory /srv/security/>
-		Options Indexes Multiviews
-        AllowOverride AuthConfig Limit
-        Order allow,deny
-        Allow from all
-        WSGIProcessGroup security 
-        WSGIApplicationGroup %{GLOBAL}
+        	AuthType Basic
+                AuthName "Media Archive"
+                AuthBasicProvider external
+                AuthExternal pwauth
+                Require group users
+
+		WSGIProcessGroup security 
+        	WSGIApplicationGroup %{GLOBAL}
 	</Directory>
 
 	<Directory /srv/motion/>
-		Options Indexes FollowSymLinks MultiViews
-		AllowOverride None
-		Order allow,deny
-		allow from all
+		Options Indexes Multiviews
+
+		AuthType Basic
+		AuthName "Media Archive"
+		AuthBasicProvider external
+		AuthExternal pwauth
+		Require group users
 	</Directory>
 
 	ProxyPass /camera0 http://localhost:8081
 
 	<Location /camera0>
-		Options Indexes FollowSymLinks MultiViews
-		Order allow,deny
-		allow from all
+		AuthType Basic
+                AuthName "Media Archive"
+                AuthBasicProvider external
+                AuthExternal pwauth
+                Require group users
 	</Location>
 
 	ErrorLog ${APACHE_LOG_DIR}/error.log
