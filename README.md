@@ -3,13 +3,18 @@ GarageSecurity
 
 A front-end to the Motion subsystem and Raspberry Pi GPIO, used for remote residential garage surveillance.
 
+
 Setup
 -----
+
 Hardware setup is available at: http://deckerego.blogspot.com/2013/10/your-barn-door-is-open.html
+
 Setting up Ubuntu for the app is detailed at: http://deckerego.blogspot.com/2013/10/your-barn-door-is-off-its-hinges.html
+
 
 Installation
 ------------
+
 1. Install python-distribute to obtain Python's easy_install
 2. Install pip using easy_install (how meta) for updating application dependencies
 3. Install libapache2-mod-wsgi to permit Apache to host Bottle
