@@ -14,15 +14,25 @@
 	</head>
 
 	<body>
-		<div class="wrapper">
-			<div class="container">
-				<div class="canvas-container">
-					<canvas id="camera0" width="1280" height="720"></canvas>
-				</div>
-			</div>
-		</div>
+
+		<table>
+			<tr>
+				<td colspan="2">
+					<div class="wrapper">
+						<div class="container">
+							<div class="canvas-container">
+								<canvas id="camera0" width="1280" height="720"></canvas>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
 		
-		<button onClick="executeCommand();">Open or Close Door</button>
+			<tr>
+				<td class="buttonCell"><button onClick="executeCommand();">Open or Close Door</button></td>
+				<td class="buttonCell"><button onClick="window.location=/media;">Video Archives</button></td>
+			</tr>
+		</table>
 
 		<script type="text/javascript">
 			renderCamera("camera0", "/camera0");
