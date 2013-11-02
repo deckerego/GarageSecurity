@@ -30,7 +30,7 @@
 		
 			<tr>
 				<td class="buttonCell"><button onClick="executeCommand();">Open or Close Door</button></td>
-				<td class="buttonCell"><button onClick="window.location=/media;">Video Archives</button></td>
+				<td class="buttonCell"><button onClick="window.location.assign('/media');">Video Archives</button></td>
 			</tr>
 		</table>
 

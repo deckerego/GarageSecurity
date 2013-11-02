@@ -1,5 +1,5 @@
 <VirtualHost *:80>
-	WSGIDaemonProcess security user=www-data group=www-data processes=1 threads=1
+	WSGIDaemonProcess security user=www-data group=www-data processes=1 threads=4
 	WSGIScriptAlias /security /srv/security/routes.py
 
 	ServerAdmin webmaster@localhost
