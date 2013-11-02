@@ -4,17 +4,10 @@
 
 	ServerAdmin webmaster@localhost
 
-	RedirectMatch 302 ^/$ /security/
-
 	Alias /media /srv/motion
 
 	AddExternalAuth pwauth /usr/sbin/pwauth
 	SetExternalAuthMethod pwauth pipe
-
-	<Directory />
-		Options FollowSymLinks
-		AllowOverride None
-	</Directory>
 
 	<Directory /srv/security/>
         	AuthType Basic
