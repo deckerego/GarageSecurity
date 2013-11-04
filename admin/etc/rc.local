@@ -17,6 +17,6 @@ if [ "$_IP" ]; then
   printf "My IP address is %s\n" "$_IP"
 fi
 
-sudo -u www-data gpio -g export 17 out
+sudo -u www-data gpio export 17 out
 
 exit 0
