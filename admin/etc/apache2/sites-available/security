@@ -1,6 +1,6 @@
 <VirtualHost *:80>
 	WSGIDaemonProcess security user=www-data group=www-data processes=1 threads=4
-	WSGIScriptAlias /security /srv/security/routes.py
+	WSGIScriptAlias / /srv/security/routes.py
 
 	ServerAdmin webmaster@localhost
 
@@ -14,7 +14,7 @@
                 AuthName "Media Archive"
                 AuthBasicProvider external
                 AuthExternal pwauth
-                Require group users
+                Require valid-user
 
 		WSGIProcessGroup security 
         	WSGIApplicationGroup %{GLOBAL}
@@ -27,17 +27,17 @@
 		AuthName "Media Archive"
 		AuthBasicProvider external
 		AuthExternal pwauth
-		Require group users
+		Require valid-user
 	</Directory>
 
 	ProxyPass /camera0 http://localhost:8081
 
 	<Location /camera0>
 		AuthType Basic
-                AuthName "Media Archive"
+                AuthName "Camera 0"
                 AuthBasicProvider external
                 AuthExternal pwauth
-                Require group users
+                Require valid-user
 	</Location>
 
 	ErrorLog ${APACHE_LOG_DIR}/error.log
