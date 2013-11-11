@@ -40,6 +40,16 @@
                 Require valid-user
 	</Location>
 
+        ProxyPass /monit http://localhost:2812
+
+        <Location /monit>
+                AuthType Basic
+                AuthName "Service Uptime"
+                AuthBasicProvider external
+                AuthExternal pwauth
+                Require valid-user
+        </Location>
+
 	ErrorLog ${APACHE_LOG_DIR}/error.log
 
 	LogLevel warn

@@ -29,8 +29,11 @@
 			</tr>
 		
 			<tr>
-				<td class="buttonCell"><button onClick="executeCommand();">Open or Close Door</button></td>
-				<td class="buttonCell"><button onClick="window.location.assign('/media');">Video Archives</button></td>
+				<td class="buttonCell" rowspan="2"><button onClick="executeCommand();">Open or Close Door</button></td>
+				<td class="buttonCell"><button onClick="window.location.assign('/media/');">Video Archives</button></td>
+			</tr>
+			<tr>
+				<td class="buttonCell"><button onClick="window.location.assign('/monit/');">System Stats</button></td>
 			</tr>
 		</table>
 

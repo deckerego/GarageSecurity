@@ -6,7 +6,8 @@ button {
 	font-size: 15px;
 	font-weight: bold;
 	font-style: normal;
-	height: 50px;
+	min-height: 50px;
+	height: 100%;
 	width: 100%;
 	text-align: center;
 	text-shadow: 1px 1px 0px #aaaaaa;
@@ -17,7 +18,8 @@ button:active {
 }
 
 .buttonCell {
-   width: 50%;
+	width: 50%;
+	vertical-align: center;
 }
 
 .wrapper {
