@@ -14,6 +14,10 @@ from bottle import Bottle, HTTPResponse, static_file, get, put, request, templat
 
 application = Bottle()
 
+@application.route('/favicon.ico')
+def send_favicon():
+    return static_file('favicon.ico', root='views/images')
+
 @application.route('/js/<filename:path>')
 def send_js(filename):
     return static_file(filename, root='views/js')
