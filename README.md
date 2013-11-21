@@ -20,10 +20,10 @@ Installation
 3. Install libapache2-mod-wsgi to permit Apache to host Bottle
 4. Install libapache2-mod-proxy to proxy the MJPEG webcamm feed through Apache
 5. Clone this repository or download the .ZIP, which will include the Bottle webapp and some admin configs/scripts
-6. Install GarageSecurity's dependencies using pip install -r pip_requirements.txt
+6. Install GarageSecurity's dependencies using pip install -r app/pip_requirements.txt
 7. Expose the GPIO port you connect the garage door opener to using the WiringPi GPIO Utility, e.g. gpio export 17 out
 8. Allow www-data to access the GPIO port by adding it to the gpio user group in /etc/group
-9. Copy the Python (.py) and view (view/) files into /srv/security
+9. Copy the files within the app/ directory into /srv/security
 10. Add or modify config files as detailed in the admin/ directory
 
 More details are available at http://deckerego.blogspot.com/2013/10/your-barn-door-is-on-display.html

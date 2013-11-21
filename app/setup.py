@@ -11,7 +11,7 @@ setup(
     author_email='deckerego@gmail.com',
     url='https://github.com/deckerego/GarageSecurity',
     packages=[''],
-    long_description=open('README.md').read(),
+    long_description=open('../README.md').read(),
     data_files=[
         ('views',    [os.path.join('views', 'index.tpl')]),
         ('views/js', [os.path.join('views/js', 'mjpeg_viewer.js')]),
