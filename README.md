@@ -7,9 +7,9 @@ A front-end to the Motion subsystem and Raspberry Pi GPIO, used for remote resid
 Setup
 -----
 
-Hardware setup is available at: http://deckerego.blogspot.com/2013/10/your-barn-door-is-open.html
+Hardware setup is available at: http://blog.deckerego.net/2013/10/your-barn-door-is-open.html
 
-Setting up Ubuntu for the app is detailed at: http://deckerego.blogspot.com/2013/10/your-barn-door-is-off-its-hinges.html
+Setting up Ubuntu for the app is detailed at: http://blog.deckerego.net/2013/10/your-barn-door-is-off-its-hinges.html
 
 
 Installation
@@ -26,4 +26,4 @@ Installation
 9. Copy the files within the app/ directory into /srv/security
 10. Add or modify config files as detailed in the admin/ directory
 
-More details are available at http://deckerego.blogspot.com/2013/10/your-barn-door-is-on-display.html
+More details are available at http://blog.deckerego.net/2013/10/your-barn-door-is-on-display.html
