@@ -50,7 +50,7 @@ class Jabber(sleekxmpp.ClientXMPP):
     # De-installation from Bottle as a plugin
     def close(self):
         print "Closing XMPP Connection"
-        self.disconnect(wait=True)
+        self.disconnect(wait=False)
         
     def start(self, event):
         self.send_presence()

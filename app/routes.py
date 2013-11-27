@@ -12,6 +12,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "."))
 
 import gpio
 import json
+import time
 from jabber import Jabber
 from config import configuration
 from bottle import Bottle, HTTPResponse, static_file, get, put, request, template
@@ -32,29 +33,52 @@ def send_css(filename):
 	return static_file(filename, root='views/css')
 
 @application.get('/')
-def show_status(jabber):
-	jabber.send_recipients('GarageSec motion is working from index')
+def show_status():
 	return template('index')
 
 @application.put('/picture_save')
 def picture_save():
+	motion_event = request.json
+	date_time = time.localtime(motion_event['event_time'] / 1000)
+
+	jabber.send_recipients('New Garage security image created on %s: %s' % (time.strftime('%a, %d %b %Y %H:%M:%S', date_time), motion_event['file']))
+
 	return HTTPResponse(request.body.getvalue(), 200)
 
 @application.put('/movie_start')
 def movie_start():
+	motion_event = request.json
+	date_time = time.localtime(motion_event['event_time'] / 1000)
+
+	jabber.send_recipients('New Garage security movie started on %s: %s' % (time.strftime('%a, %d %b %Y %H:%M:%S', date_time), motion_event['file']))
+
 	return HTTPResponse(request.body.getvalue(), 200)
 
 @application.put('/movie_end')
 def movie_end():
+	motion_event = request.json
+	date_time = time.localtime(motion_event['event_time'] / 1000)
+
+	jabber.send_recipients('New Garage security movie created on %s: %s' % (time.strftime('%a, %d %b %Y %H:%M:%S', date_time), motion_event['file']))
+
 	return HTTPResponse(request.body.getvalue(), 200)
 
 @application.put('/motion_detected')
 def motion_detected():
+	motion_event = request.json
+	date_time = time.localtime(motion_event['event_time'] / 1000)
+
+	jabber.send_recipients('Garage Motion Detected at %s' % time.strftime('%a, %d %b %Y %H:%M:%S', date_time))
+
 	return HTTPResponse(request.body.getvalue(), 200)
 
 @application.put('/area_detected')
-def area_detected():
+def area_detected(jabber):
 	motion_event = request.json
+	date_time = time.localtime(motion_event['event_time'] / 1000)
+
+	jabber.send_recipients('Motion in Garage Area Detected at %s' % time.strftime('%a, %d %b %Y %H:%M:%S', date_time))
+
 	return HTTPResponse(request.body.getvalue(), 200)
 
 @application.put('/remote/<button:int>')
