@@ -1,14 +1,16 @@
 #!/bin/bash
 
-API_URL=http://localhost:9003/area_detected
-FILE_NAME="$1"
-PIXELS="$2"
-TIME_EPOCH="$3"
-EVENT_NUMBER="$4"
+API_URL="http://localhost/$1"
+API_USER=
+API_PASS=
+FILE_NAME="$2"
+PIXELS="$3"
+TIME_EPOCH="$4"
+EVENT_NUMBER="$5"
 
-PUT=`sed s/MOTION_FILE_NAME/$FILE_NAME/ <motion.json`
+PUT=`sed s/MOTION_FILE_NAME/$FILE_NAME/ </usr/local/motion/motion.json`
 PUT=`echo $PUT | sed s/MOTION_PIXELS_DETECTED/$PIXELS/`
 PUT=`echo $PUT | sed s/MOTION_SECONDS_SINCE_EPOCH/$TIME_EPOCH/`
 PUT=`echo $PUT | sed s/MOTION_EVENT_NUMBER/$EVENT_NUMBER/`
 
-curl -v -H "Content-Type: application/json" -X PUT -d "$PUT" "$API_URL"
+curl -u "$API_USER:$API_PASS" -H "Content-Type: application/json" -X PUT -d "$PUT" "$API_URL"
