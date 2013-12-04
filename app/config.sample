@@ -1,11 +1,11 @@
 import argparse
 
 config_values = {
-	'xmpp_server_host': '74.125.142.125',
+	'xmpp_server_host': 'talk.google.com',
 	'xmpp_server_port': '5222',
-    'xmpp_username': '',
+    'xmpp_username': '@gmail.com',
     'xmpp_password': '',
-    'xmpp_recipients': ''
+    'xmpp_recipients': '@gmail.com'
 }
 
 class Configuration(object):

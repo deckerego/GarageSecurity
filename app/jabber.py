@@ -1,6 +1,9 @@
 import sleekxmpp
 import inspect
+import logging
 from config import configuration
+
+logger = logging.getLogger('garagesec')
 
 class Jabber(sleekxmpp.ClientXMPP):
     name = 'jabber_xmpp'
@@ -11,13 +14,17 @@ class Jabber(sleekxmpp.ClientXMPP):
         password = configuration.get('xmpp_password')
 
         super(Jabber, self).__init__(jid, password)
+
         self.add_event_handler('session_start', self.start)
+        self.add_event_handler('message', self.receive)
 
     def __del__(self):
         self.close()
 
     # This is invoked when installed as a Bottle plugin
     def setup(self, app):
+        self.routes = app
+
         for other in app.plugins:
             if not isinstance(other, Jabber):
                 continue
@@ -28,6 +35,7 @@ class Jabber(sleekxmpp.ClientXMPP):
         port = configuration.get('xmpp_server_port')
 
         if self.connect((host, port)):
+            logger.info("Opened XMPP Connection")
             self.process(block=False)
         else:
             raise Exception("Unable to connect to Google Jabber server")
@@ -49,17 +57,29 @@ class Jabber(sleekxmpp.ClientXMPP):
 
     # De-installation from Bottle as a plugin
     def close(self):
-        print "Closing XMPP Connection"
+        logger.info("Closing XMPP Connection")
         self.disconnect(wait=False)
         
     def start(self, event):
         self.send_presence()
         self.get_roster()
 
-    def send_recipients(self, message):
-        recipient = configuration.get('xmpp_recipients')
+    def send_recipients(self, body):
+        message = self.Message()
+        message['to'] = configuration.get('xmpp_recipients')
+        message['type'] = 'chat'
+        message['body'] = body
 
-        self.send_message(mto=recipient, mbody=message)
+        logger.debug("Sending message: %s" % message)
+        message.send()
+
+    def receive(self, msg):
+        if msg['type'] in ('chat', 'normal'):
+            logger.debug("XMPP Message: %s" % msg)
+
+            routes.echo()
+
+            msg.reply("Received: %(body)s" % msg).send()
 
 class PluginError(Exception):
     pass
