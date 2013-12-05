@@ -77,8 +77,6 @@ class Jabber(sleekxmpp.ClientXMPP):
         if msg['type'] in ('chat', 'normal'):
             logger.debug("XMPP Message: %s" % msg)
 
-            routes.echo()
-
             msg.reply("Received: %(body)s" % msg).send()
 
 class PluginError(Exception):

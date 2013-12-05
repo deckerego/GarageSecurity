@@ -5,7 +5,7 @@ import os
 import sys
 import logging
 
-logging.basicConfig(level=logging.DEBUG, format='%(levelname)-8s %(message)s')
+logging.basicConfig(level=logging.WARN, format='%(levelname)-8s %(message)s')
 
 os.chdir(os.path.dirname(__file__))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), ".")))
@@ -13,6 +13,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "."))
 import gpio
 import json
 import time
+import vision
 from jabber import Jabber
 from config import configuration
 from bottle import Bottle, HTTPResponse, static_file, get, put, request, template
@@ -36,9 +37,10 @@ def send_css(filename):
 def show_status():
 	return template('index')
 
-@application.put('/echo')
-def echo():
-	return HTTPResponse(request.body.getvalue(), 200)
+@application.get('/door')
+def door_status():
+	is_closed = vision.look_if_closed('http://localhost:8081')
+	raise HTTPResponse('{ "closed": %s }' % is_closed, 200)
 
 @application.put('/picture_save')
 def picture_save():
