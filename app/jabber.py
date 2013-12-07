@@ -1,6 +1,7 @@
 import sleekxmpp
 import inspect
 import logging
+import vision
 from config import configuration
 
 logger = logging.getLogger('garagesec')
@@ -77,7 +78,13 @@ class Jabber(sleekxmpp.ClientXMPP):
         if msg['type'] in ('chat', 'normal'):
             logger.debug("XMPP Message: %s" % msg)
 
-            msg.reply("Received: %(body)s" % msg).send()
+            if 'door' in msg['body'].lower():
+                is_closed, location = vision.look_if_closed()
+                msg.reply("Door is closed: %s" % is_closed).send()
+            elif 'shush' in msg['body'].lower():
+                msg.reply("Silencing alerts for %d minutes" % 0).send()
+            else:
+                msg.reply("Command not found: %(body)s" % msg).send()
 
 class PluginError(Exception):
     pass

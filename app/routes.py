@@ -39,8 +39,8 @@ def show_status():
 
 @application.get('/door')
 def door_status():
-	is_closed = vision.look_if_closed('http://localhost:8081')
-	raise HTTPResponse('{ "closed": %s }' % is_closed, 200)
+	is_closed, location = vision.look_if_closed()
+	raise HTTPResponse('{ "closed": %s, "location": [%d, %d] }' % (is_closed, location[0], location[1]), 200)
 
 @application.put('/picture_save')
 def picture_save():
