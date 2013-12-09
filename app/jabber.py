@@ -1,7 +1,7 @@
 import sleekxmpp
 import inspect
 import logging
-import vision
+import datetime
 from config import configuration
 from vision import Vision
 
@@ -16,6 +16,7 @@ class Jabber(sleekxmpp.ClientXMPP):
     def __init__(self, jid, password):
         super(Jabber, self).__init__(jid, password)
 
+        self.last_alert = None
         self.add_event_handler('session_start', self.start)
         self.add_event_handler('message', self.receive)
 
@@ -66,6 +67,9 @@ class Jabber(sleekxmpp.ClientXMPP):
         self.get_roster()
 
     def send_recipients(self, body):
+        #FIXME It's rather ridiculous to maintain the last alert timestamp in two places
+        self.last_alert = datetime.now()
+
         message = self.Message()
         message['to'] = configuration.get('xmpp_recipients')
         message['type'] = 'chat'
@@ -74,21 +78,21 @@ class Jabber(sleekxmpp.ClientXMPP):
         logger.debug("Sending message: %s" % message)
         message.send()
 
-    def receive(self, msg):
-        if msg['type'] in ('chat', 'normal'):
-            logger.debug("XMPP Message: %s" % msg)
+    def receive(self, message):
+        if message['type'] in ('chat', 'normal'):
+            logger.debug("XMPP Message: %s" % message)
 
-            if 'door' in msg['body'].lower():
+            if 'door' in message['body'].lower():
                 template_image = configuration.get('vision_template_image')
                 template_coords = configuration.get('vision_template_coords')
                 template_margin = configuration.get('vision_template_margin')
                 
                 is_closed, location = vision_service.look_if_closed(template_image, template_coords, template_margin)
-                msg.reply("Door is closed: %s" % is_closed).send()
-            elif 'shush' in msg['body'].lower():
-                msg.reply("Silencing alerts for %d minutes" % 0).send()
+                message.reply("Door is closed: %s" % is_closed).send()
+            elif 'status' in message['body'].lower():
+                message.reply("Last alert: %s" % self.last_alert).send()
             else:
-                msg.reply("Command not found: %(body)s" % msg).send()
+                message.reply("Command not found: %(body)s" % message).send()
 
 class PluginError(Exception):
     pass

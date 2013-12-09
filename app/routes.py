@@ -13,6 +13,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "."))
 import gpio
 import json
 import time
+import datetime
 from vision import Vision
 from jabber import Jabber
 from config import configuration
@@ -23,6 +24,8 @@ vision_service = Vision(configuration.get('webcam_host'), configuration.get('web
 
 application = Bottle()
 application.install(jabber_service)
+
+last_area_detected = None
 
 @application.route('/favicon.ico')
 def send_favicon():
@@ -37,8 +40,12 @@ def send_css(filename):
 	return static_file(filename, root='views/css')
 
 @application.get('/')
-def show_status():
+def dashboard():
 	return template('index')
+
+@application.get('/status')
+def show_status():
+	return '{ "last_area_detected": %s }' % last_area_detected
 
 @application.get('/door')
 def door_status():
@@ -48,7 +55,7 @@ def door_status():
 	
 	is_closed, location = vision_service.look_if_closed(template_image, template_coords, template_margin)
 
-	raise HTTPResponse('{ "closed": %s, "location": [%d, %d] }' % (is_closed, location[0], location[1]), 200)
+	return '{ "closed": %s, "location": [%d, %d] }' % (is_closed, location[0], location[1])
 
 @application.put('/picture_save')
 def picture_save():
@@ -57,33 +64,35 @@ def picture_save():
 	time_string = time.strftime('%a, %d %b %Y %H:%M:%S', date_time)
 	image_file_path = motion_event['file']
 
-	return HTTPResponse(request.body.getvalue(), 200)
+	return request.body.getvalue()
 
 @application.put('/movie_start')
 def movie_start():
-	return HTTPResponse(request.body.getvalue(), 200)
+	return request.body.getvalue()
 
 @application.put('/movie_end')
 def movie_end():
-	return HTTPResponse(request.body.getvalue(), 200)
+	return request.body.getvalue()
 
 @application.put('/motion_detected')
 def motion_detected():
-	return HTTPResponse(request.body.getvalue(), 200)
+	return request.body.getvalue()
 
 @application.put('/area_detected')
 def area_detected(jabber):
+	last_area_detected = datetime.now()
+
 	motion_event = request.json
 	date_time = time.localtime(motion_event['event_time'])
 	time_string = time.strftime('%a, %d %b %Y %H:%M:%S', date_time)
 
 	jabber.send_recipients('Motion in Garage Area Detected at %s' % time_string)
 
-	return HTTPResponse(request.body.getvalue(), 200)
+	return request.body.getvalue()
 
 @application.put('/remote/<button:int>')
 def push_remote_button(button):
 	if gpio.push_button(button):
-		raise HTTPResponse('{ "pressed": %d }' % button, 200)
+		return '{ "pressed": %d }' % button
 	else:
 		raise HTTPResponse('{ "error": %d }' % button, 500)

@@ -4,6 +4,7 @@ import sys
 import numpy
 
 CV_LOAD_IMAGE_UNCHANGED = -1
+CV_LOAD_IMAGE_GRAYSCALE = 0
 
 class Vision:
 
@@ -13,8 +14,8 @@ class Vision:
 
 	def look_if_closed(self, template_path, template_location, template_margin=5):
 		base_bytes = self.load_multipart_stream()
-		base = cv2.imdecode(base_bytes, CV_LOAD_IMAGE_UNCHANGED)
-		template = cv2.imread(template_path, CV_LOAD_IMAGE_UNCHANGED)
+		base = cv2.imdecode(base_bytes, CV_LOAD_IMAGE_GRAYSCALE)
+		template = cv2.imread(template_path, CV_LOAD_IMAGE_GRAYSCALE)
 
 		res = cv2.matchTemplate(base, template, cv2.TM_CCOEFF_NORMED)
 		min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
