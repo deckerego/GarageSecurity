@@ -80,7 +80,7 @@ def motion_detected():
 
 @application.put('/area_detected')
 def area_detected(jabber):
-	last_area_detected = datetime.now()
+	last_area_detected = datetime.datetime.now()
 
 	motion_event = request.json
 	date_time = time.localtime(motion_event['event_time'])

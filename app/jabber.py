@@ -68,7 +68,7 @@ class Jabber(sleekxmpp.ClientXMPP):
 
     def send_recipients(self, body):
         #FIXME It's rather ridiculous to maintain the last alert timestamp in two places
-        self.last_alert = datetime.now()
+        self.last_alert = datetime.datetime.now()
 
         message = self.Message()
         message['to'] = configuration.get('xmpp_recipients')
