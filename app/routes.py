@@ -14,16 +14,17 @@ import gpio
 import json
 import time
 import datetime
+import camera
 from vision import Vision
 from jabber import Jabber
 from config import configuration
-from bottle import Bottle, HTTPResponse, static_file, get, put, request, template
+from bottle import Bottle, response, HTTPResponse, static_file, get, put, request, template
 
 jabber_service = Jabber(configuration.get('xmpp_username'), configuration.get('xmpp_password'))
 vision_service = Vision(configuration.get('webcam_host'), configuration.get('webcam_port'))
 
 application = Bottle()
-application.install(jabber_service)
+#application.install(jabber_service)
 
 last_area_detected = None
 
@@ -42,6 +43,11 @@ def send_css(filename):
 @application.get('/')
 def dashboard():
 	return template('index')
+
+@application.get('/camera0')
+def show_image():
+	response.headers['Content-Type'] = 'image/jpeg'
+	return camera.get_still()
 
 @application.get('/status')
 def show_status():

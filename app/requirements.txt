@@ -3,3 +3,5 @@ nose>=1.1.2
 flexmock==0.9.7
 wiringpi>=1.0.5
 sleekxmpp>=1.0
+picamera>=1.2
+PIL>=1.1.7

@@ -30,25 +30,15 @@
 		Require valid-user
 	</Directory>
 
-	ProxyPass /camera0 http://localhost:8081
+    ProxyPass /monit http://localhost:2812
 
-	<Location /camera0>
-		AuthType Basic
-                AuthName "Camera 0"
-                AuthBasicProvider external
-                AuthExternal pwauth
-                Require valid-user
-	</Location>
-
-        ProxyPass /monit http://localhost:2812
-
-        <Location /monit>
-                AuthType Basic
-                AuthName "Service Uptime"
-                AuthBasicProvider external
-                AuthExternal pwauth
-                Require valid-user
-        </Location>
+    <Location /monit>
+            AuthType Basic
+            AuthName "Service Uptime"
+            AuthBasicProvider external
+            AuthExternal pwauth
+            Require valid-user
+    </Location>
 
 	ErrorLog ${APACHE_LOG_DIR}/error.log
 

@@ -26,6 +26,7 @@ setup(
     ],
     keywords='motion security surveillance garage remote raspberrypi',
     requires=[
-        'bottle (==0.10.11)'
+        'bottle (==0.10.11)',
+        'picamera (>=1.2)'
     ],
 	)
