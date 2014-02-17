@@ -5,3 +5,4 @@ wiringpi>=1.0.5
 sleekxmpp>=1.0
 picamera>=1.2
 PIL>=1.1.7
+pyserial>=2.7

@@ -2,12 +2,10 @@ import sleekxmpp
 import inspect
 import logging
 import datetime
+import rangefinder
 from config import configuration
-from vision import Vision
 
 logger = logging.getLogger('garagesec')
-#FIXME There is definitely a better way to share a vision service than to have two running instantiations....
-vision_service = Vision(configuration.get('webcam_host'), configuration.get('webcam_port'))
 
 class Jabber(sleekxmpp.ClientXMPP):
     name = 'jabber_xmpp'
@@ -83,12 +81,8 @@ class Jabber(sleekxmpp.ClientXMPP):
             logger.debug("XMPP Message: %s" % message)
 
             if 'door' in message['body'].lower():
-                template_image = configuration.get('vision_template_image')
-                template_coords = configuration.get('vision_template_coords')
-                template_margin = configuration.get('vision_template_margin')
-                
-                is_closed, location = vision_service.look_if_closed(template_image, template_coords, template_margin)
-                message.reply("Door is closed: %s" % is_closed).send()
+                distance = rangefinder.get_range()
+                message.reply("Door is closed: %s" % distance).send()
             elif 'status' in message['body'].lower():
                 message.reply("Last alert: %s" % self.last_alert).send()
             else:

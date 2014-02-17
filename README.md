@@ -21,7 +21,7 @@ Hardware
   </tr>
   <tr>
     <td>XL-Maxsonar EZ4</td>
-    <td>https://www.sparkfun.com/products/9495</td>
+    <td>http://www.maxbotix.com/documents/XL-MaxSonar-EZ_Datasheet.pdf</td>
   </tr>
   <tr>
     <td>Resistors, NPN transistors, NPN MOSFET</td>
@@ -42,7 +42,6 @@ Installation
 
 1. Install python-distribute to obtain Python's easy_install
 2. Install pip using easy_install (how meta) for updating application dependencies
-3. Install OpenCV and its Python libraries (see http://docs.opencv.org/doc/tutorials/introduction/table_of_content_introduction/table_of_content_introduction.html)
 4. Install libapache2-mod-wsgi to permit Apache to host Bottle
 5. Install libapache2-mod-proxy to proxy the MJPEG webcam feed through Apache
 6. Clone this repository or download the .ZIP, which will include the Bottle webapp and some admin configs/scripts
