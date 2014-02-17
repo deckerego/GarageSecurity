@@ -43,7 +43,7 @@ def send_css(filename):
 def dashboard():
 	return template('index')
 
-@application.get('/camera0')
+@application.get('/camera')
 def show_image():
 	response.headers['Content-Type'] = 'image/jpeg'
 	return camera.get_still()
@@ -52,7 +52,7 @@ def show_image():
 def show_status():
 	return '{ "last_area_detected": %s }' % last_area_detected
 
-@application.get('/range0')
+@application.get('/range')
 def door_status():
 	distance = rangefinder.get_range()
 

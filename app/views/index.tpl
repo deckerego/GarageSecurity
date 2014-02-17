@@ -21,7 +21,7 @@
 					<div class="wrapper">
 						<div class="container">
 							<div class="canvas-container">
-								<canvas id="camera0" width="1280" height="720"></canvas>
+								<canvas id="camera" width="1280" height="720"></canvas>
 							</div>
 						</div>
 					</div>
@@ -38,7 +38,7 @@
 		</table>
 
 		<script type="text/javascript">
-			renderCamera("camera0", "/camera0");
+			renderCamera("camera", "/camera", "/range");
 		</script>
 	</body>
 </html>
