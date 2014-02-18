@@ -41,12 +41,9 @@ class Jabber(sleekxmpp.ClientXMPP):
             raise Exception("Unable to connect to Google Jabber server")
 
     # This is invoked within Bottle as part of each route when installed
-    def apply(self, callback, context):
-        conf = context.config.get('jabber') or {}
-        keyword = conf.get('keyword', self.keyword)
-
-        args = inspect.getargspec(context.callback)[0]
-        if keyword not in args:
+    def apply(self, callback, route):
+        args = inspect.getargspec(callback)[0]
+        if self.keyword not in args:
             return callback
 
         def wrapper(*args, **kwargs):

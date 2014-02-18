@@ -14,16 +14,15 @@ import gpio
 import json
 import time
 import datetime
-import camera
 import rangefinder
+from camera import Camera
 from jabber import Jabber
 from config import configuration
 from bottle import Bottle, response, HTTPResponse, static_file, get, put, request, template
 
-jabber_service = Jabber(configuration.get('xmpp_username'), configuration.get('xmpp_password'))
-
 application = Bottle()
-application.install(jabber_service)
+#application.install(Jabber(configuration.get('xmpp_username'), configuration.get('xmpp_password')))
+application.install(Camera())
 
 last_area_detected = None
 
@@ -44,7 +43,7 @@ def dashboard():
 	return template('index')
 
 @application.get('/camera')
-def show_image():
+def show_image(camera):
 	response.headers['Content-Type'] = 'image/jpeg'
 	return camera.get_still()
 
