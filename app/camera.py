@@ -66,9 +66,12 @@ class Camera(object):
 
             for nothing in camera.capture_continuous(buffer, format='jpeg', use_video_port=True):
                 buffer.seek(0)
-                self.stream = io.BytesIO()
-                self.stream.write(buffer.read())
-                self.stream.seek(0)
+
+                live_stream = io.BytesIO()
+                live_stream.write(buffer.read())
+                live_stream.seek(0)
+                self.stream = live_stream
+
                 buffer.seek(0)
                 buffer.truncate()
 
