@@ -44,18 +44,16 @@ def dashboard():
 
 @application.get('/camera')
 def show_image(camera):
-	response.headers['Content-Type'] = 'image/jpeg'
-	return camera.get_still()
+	stream = camera.get_stream().getvalue()
+
+	response.headers['Content-Type'] = 'multipart/x-mixed-replace'
+	response.headers['Content-Length'] = len(stream)
+
+	return stream
 
 @application.get('/status')
 def show_status():
 	return '{ "last_area_detected": %s }' % last_area_detected
-
-@application.get('/range')
-def door_status():
-	distance = rangefinder.get_range()
-
-	return '{ "distance": %s }' % (distance)
 
 @application.put('/picture_save')
 def picture_save():

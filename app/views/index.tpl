@@ -38,7 +38,7 @@
 		</table>
 
 		<script type="text/javascript">
-			renderCamera("camera", "/camera", "/range");
+			renderCamera("camera", "/camera");
 		</script>
 	</body>
 </html>

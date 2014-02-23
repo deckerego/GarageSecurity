@@ -50,30 +50,32 @@ class Camera(object):
         logger.info("Opening Camera Connection")
         thread.start_new_thread(self.read_camera, ())
 
-    def get_still(self):
+    def get_stream(self):
+        self.stream.seek(0)
+        print "Getting stream buffer"
         return self.stream
 
     def read_camera(self):
         buffer = io.BytesIO()
 
-        with picamera.PiCamera() as camera:
-            camera.resolution = (1440, 1080)
-            camera.vflip = True
-            camera.hflip = True
-            camera.exposure_mode = 'night'
-            camera.start_preview()
-            time.sleep(2)
+        while True:
+            print "Enter camera loop"
+            try:
+                with picamera.PiCamera() as camera:
+                    print "Getting camera snapshot"
+                    #camera.resolution = (1280, 720)
+                    camera.resolution = (640, 480)
+                    camera.start_preview()
+                    time.sleep(2)
+                    camera.start_recording(buffer, format='mjpeg')
+                    print "Recording camera snapshot"
+                    camera.wait_recording(5)
+                    camera.stop_recording()
+            except:
+                print "Unexpected camera error: %s", sys.exc_info()[0]
+                logger.error("Unexpected camera error: %s", sys.exc_info()[0])
 
-            for nothing in camera.capture_continuous(buffer, format='jpeg', use_video_port=True):
-                buffer.seek(0)
-
-                live_stream = io.BytesIO()
-                live_stream.write(buffer.read())
-                live_stream.seek(0)
-                self.stream = live_stream
-
-                buffer.seek(0)
-                buffer.truncate()
+            self.stream = buffer
 
 
 class PluginError(Exception):
