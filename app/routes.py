@@ -44,12 +44,8 @@ def dashboard():
 
 @application.get('/camera')
 def show_image(camera):
-	stream = camera.get_stream().getvalue()
-
-	response.headers['Content-Type'] = 'multipart/x-mixed-replace'
-	response.headers['Content-Length'] = len(stream)
-
-	return stream
+	response.headers['Content-Type'] = 'image/jpeg'
+	return camera.get_still()
 
 @application.get('/status')
 def show_status():

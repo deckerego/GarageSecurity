@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8" />
 		<link rel="stylesheet" href="css/styles.css" type="text/css" />
-		<script type="text/javascript" src="js/camera_viewer.js"></script>
+		<script type="text/javascript" src="js/camera_viewer.js?version=4"></script>
 		<script type="text/javascript">
 			function executeCommand() {
 				var request = new XMLHttpRequest();
