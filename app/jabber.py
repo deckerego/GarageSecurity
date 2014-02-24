@@ -80,8 +80,12 @@ class Jabber(sleekxmpp.ClientXMPP):
     def receive(self, message):
         if message['type'] in ('chat', 'normal'):
             logger.debug("XMPP Message: %s" % message)
+            from_account = "%s@%s" % (message['from'].user, message['from'].domain)
+            logger.info("Received message from %s" % from_account)
 
-            if 'd00r' in message['body'].lower():
+            if not from_account in configuration.get('xmpp_recipients'):
+                message.reply("Who are you again?").send()
+            elif 'd00r' in message['body'].lower():
                 image_stream = self.camera.get_still()
                 image_url = self.bucket.upload(image_stream)
                 message.reply("Status: %s" % image_url).send()
