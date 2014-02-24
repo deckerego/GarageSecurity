@@ -20,9 +20,12 @@ from jabber import Jabber
 from config import configuration
 from bottle import Bottle, response, HTTPResponse, static_file, get, put, request, template
 
+camera = Camera()
+jabber = Jabber(configuration.get('xmpp_username'), configuration.get('xmpp_password'), camera)
+
 application = Bottle()
-#application.install(Jabber(configuration.get('xmpp_username'), configuration.get('xmpp_password')))
-application.install(Camera())
+application.install(camera)
+application.install(jabber)
 
 last_area_detected = None
 
@@ -46,43 +49,6 @@ def dashboard():
 def show_image(camera):
 	response.headers['Content-Type'] = 'image/jpeg'
 	return camera.get_still()
-
-@application.get('/status')
-def show_status():
-	return '{ "last_area_detected": %s }' % last_area_detected
-
-@application.put('/picture_save')
-def picture_save():
-	motion_event = request.json
-	date_time = time.localtime(motion_event['event_time'])
-	time_string = time.strftime('%a, %d %b %Y %H:%M:%S', date_time)
-	image_file_path = motion_event['file']
-
-	return request.body.getvalue()
-
-@application.put('/movie_start')
-def movie_start():
-	return request.body.getvalue()
-
-@application.put('/movie_end')
-def movie_end():
-	return request.body.getvalue()
-
-@application.put('/motion_detected')
-def motion_detected():
-	return request.body.getvalue()
-
-@application.put('/area_detected')
-def area_detected(jabber):
-	last_area_detected = datetime.datetime.now()
-
-	motion_event = request.json
-	date_time = time.localtime(motion_event['event_time'])
-	time_string = time.strftime('%a, %d %b %Y %H:%M:%S', date_time)
-
-	jabber.send_recipients('Motion in Garage Area Detected at %s' % time_string)
-
-	return request.body.getvalue()
 
 @application.put('/remote/<button:int>')
 def push_remote_button(button):

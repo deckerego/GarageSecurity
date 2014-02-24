@@ -2,7 +2,8 @@ import sleekxmpp
 import inspect
 import logging
 import datetime
-import rangefinder
+from s3 import S3
+from camera import Camera
 from config import configuration
 
 logger = logging.getLogger('garagesec')
@@ -11,12 +12,13 @@ class Jabber(sleekxmpp.ClientXMPP):
     name = 'jabber_xmpp'
     keyword = 'jabber'
 
-    def __init__(self, jid, password):
+    def __init__(self, jid, password, camera):
         super(Jabber, self).__init__(jid, password)
 
         self.last_alert = None
         self.add_event_handler('session_start', self.start)
         self.add_event_handler('message', self.receive)
+        self.camera = camera
 
     def __del__(self):
         self.close()
@@ -39,6 +41,8 @@ class Jabber(sleekxmpp.ClientXMPP):
             self.process(block=False)
         else:
             raise Exception("Unable to connect to Google Jabber server")
+
+        self.bucket = S3()
 
     # This is invoked within Bottle as part of each route when installed
     def apply(self, callback, route):
@@ -77,11 +81,10 @@ class Jabber(sleekxmpp.ClientXMPP):
         if message['type'] in ('chat', 'normal'):
             logger.debug("XMPP Message: %s" % message)
 
-            if 'door' in message['body'].lower():
-                distance = rangefinder.get_range()
-                message.reply("Door is closed: %s" % distance).send()
-            elif 'status' in message['body'].lower():
-                message.reply("Last alert: %s" % self.last_alert).send()
+            if 'd00r' in message['body'].lower():
+                image_stream = self.camera.get_still()
+                image_url = self.bucket.upload(image_stream)
+                message.reply("Status: %s" % image_url).send()
             else:
                 message.reply("Command not found: %(body)s" % message).send()
 
