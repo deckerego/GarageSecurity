@@ -5,6 +5,9 @@ import thread
 import threading
 import inspect
 import logging
+import math
+import operator
+from PIL import Image
 from config import configuration
 
 logger = logging.getLogger('garagesec')
@@ -15,8 +18,9 @@ class Camera(object):
 
     def __init__(self):
         super(Camera, self).__init__()
-        self.stream = io.BytesIO()
+        self.image_bin = b""
         self.stream_lock = threading.RLock()
+        self.difference = 0
         self.start()
 
     def __del__(self):
@@ -53,8 +57,10 @@ class Camera(object):
         thread.start_new_thread(self.read_camera, ())
 
     def get_still(self):
-        with self.stream_lock:
-            return self.stream
+        return io.BytesIO(self.image_bin)
+
+    def get_difference(self):
+        return self.difference
 
     def read_camera(self):
         buffer = io.BytesIO()
@@ -70,14 +76,27 @@ class Camera(object):
             for nothing in camera.capture_continuous(buffer, format='jpeg', use_video_port=True):
                 buffer.seek(0)
 
+                previous_image_stream = self.get_still()
                 with self.stream_lock:
-                    self.stream = io.BytesIO()
-                    self.stream.write(buffer.read())
-                    self.stream.seek(0)
+                    self.image_bin = buffer.getvalue()
+
+                self.difference = compare(previous_image_stream, self.get_still())
 
                 buffer.seek(0)
                 buffer.truncate()
 
+def compare(stream1, stream2):
+    rms = -1
+    try:
+        image1 = Image.open(stream1)
+        image2 = Image.open(stream2)
+        h1 = image1.histogram()
+        h2 = image2.histogram()
+        rms = [(h1[i] - h2[i]) ** 2 for i in xrange(len(h1))]; rms = math.sqrt(sum(rms) / len(h1));
+    except Exception as e:
+        logger.warn("Could not compare images: %s" % e)
+    finally:
+        return rms
 
 class PluginError(Exception):
     pass

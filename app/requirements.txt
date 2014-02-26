@@ -6,3 +6,4 @@ sleekxmpp>=1.1.11
 picamera>=1.2
 pyserial>=2.7
 boto>=2.25.0
+PIL>=1.1.7

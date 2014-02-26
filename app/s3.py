@@ -15,7 +15,7 @@ class S3(object):
     def upload(self, image):
         entry = Key(self.bucket)
         entry.key = 'garage0.jpg'
-        entry.set_contents_from_string(image.getvalue())
+        entry.set_contents_from_string(image)
 
         url = entry.generate_url(configuration.get('s3_url_expiry'))        
         entry.copy(entry.bucket.name, entry.name, {'Content-Type':'image/jpeg'}, preserve_acl=True)

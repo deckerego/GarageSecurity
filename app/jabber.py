@@ -2,8 +2,8 @@ import sleekxmpp
 import inspect
 import logging
 import datetime
+import urllib2
 from s3 import S3
-from camera import Camera
 from config import configuration
 
 logger = logging.getLogger('garagesec')
@@ -12,13 +12,11 @@ class Jabber(sleekxmpp.ClientXMPP):
     name = 'jabber_xmpp'
     keyword = 'jabber'
 
-    def __init__(self, jid, password, camera):
+    def __init__(self, jid, password):
         super(Jabber, self).__init__(jid, password)
 
-        self.last_alert = None
         self.add_event_handler('session_start', self.start)
         self.add_event_handler('message', self.receive)
-        self.camera = camera
 
     def __del__(self):
         self.close()
@@ -66,9 +64,6 @@ class Jabber(sleekxmpp.ClientXMPP):
         self.get_roster()
 
     def send_recipients(self, body):
-        #FIXME It's rather ridiculous to maintain the last alert timestamp in two places
-        self.last_alert = datetime.datetime.now()
-
         message = self.Message()
         message['to'] = configuration.get('xmpp_recipients')
         message['type'] = 'chat'
@@ -85,9 +80,11 @@ class Jabber(sleekxmpp.ClientXMPP):
 
             if not from_account in configuration.get('xmpp_recipients'):
                 message.reply("Who are you again?").send()
-            elif 'd00r' in message['body'].lower():
-                image_stream = self.camera.get_still()
-                image_url = self.bucket.upload(image_stream)
+            elif 'garagecamera' in message['body'].lower():
+                request = urllib2.Request('http://localhost/camera/image')
+                request.add_header("Authorization", 'Basic YXBpdXNlcjptanU3OGlrLA==')
+                image = urllib2.urlopen(request).read()
+                image_url = self.bucket.upload(image)
                 message.reply("Status: %s" % image_url).send()
             else:
                 message.reply("Command not found: %(body)s" % message).send()

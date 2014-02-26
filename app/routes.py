@@ -21,7 +21,7 @@ from config import configuration
 from bottle import Bottle, response, HTTPResponse, static_file, get, put, request, template
 
 camera = Camera()
-jabber = Jabber(configuration.get('xmpp_username'), configuration.get('xmpp_password'), camera)
+jabber = Jabber(configuration.get('xmpp_username'), configuration.get('xmpp_password'))
 
 application = Bottle()
 application.install(camera)
@@ -45,10 +45,14 @@ def send_css(filename):
 def dashboard():
 	return template('index')
 
-@application.get('/camera')
+@application.get('/camera/image')
 def show_image(camera):
 	response.headers['Content-Type'] = 'image/jpeg'
 	return camera.get_still()
+
+@application.get('/camera/diff')
+def show_image(camera):
+	return '{"rms": %d}' % camera.get_difference()
 
 @application.put('/remote/<button:int>')
 def push_remote_button(button):

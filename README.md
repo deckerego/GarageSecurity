@@ -45,11 +45,16 @@ Installation
 4. Install libapache2-mod-wsgi to permit Apache to host Bottle
 5. Install libapache2-mod-proxy to proxy the MJPEG webcam feed through Apache
 6. Clone this repository or download the .ZIP, which will include the Bottle webapp and some admin configs/scripts
-7. Install GarageSecurity's dependencies using pip install -r app/pip_requirements.txt
-8. Expose the GPIO port you connect the garage door opener to using the WiringPi GPIO Utility, e.g. gpio export 17 out
-9. Allow www-data to access the GPIO port by adding it to the gpio user group in /etc/group
-9. Allow www-data to access the Raspberry Pi camera by adding it to the video user group in /etc/group
-10. Copy the files within the app/ directory into /srv/security
-11. Add or modify config files as detailed in the admin/ directory
+7. Install libjpeg-dev
+  1. sudo apt-get install libjpeg-dev
+  2. sudo ln -s /usr/lib/arm-linux-gnueabihf/libz.so /usr/lib/libz.so
+  3. sudo ln -s /usr/lib/arm-linux-gnueabihf/libjpeg.so /usr/lib/libjpeg.so
+  4. sudo ln -s /usr/lib/arm-linux-gnueabihf/libfreetype.so /usr/lib/libfreetype.so
+8. Install GarageSecurity's dependencies using pip install -r app/pip_requirements.txt
+9. Expose the GPIO port you connect the garage door opener to using the WiringPi GPIO Utility, e.g. gpio export 17 out
+10. Allow www-data to access the GPIO port by adding it to the gpio user group in /etc/group
+11. Allow www-data to access the Raspberry Pi camera by adding it to the video user group in /etc/group
+12. Copy the files within the app/ directory into /srv/security
+13. Add or modify config files as detailed in the admin/ directory
 
 More details are available at http://blog.deckerego.net/search/label/garage%20door
