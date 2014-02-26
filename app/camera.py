@@ -84,8 +84,9 @@ class Camera(object):
 
                 self.difference = compare(previous_image_stream, self.get_still())
                 if self.difference >= self.difference_threshold:
-                    request = urllib2.Request('http://localhost/camera/motion', {})
+                    request = urllib2.Request('http://localhost/camera/motion', '')
                     request.add_header("Authorization", "Basic %s" % configuration.get('api_basic_auth'))
+                    urllib2.urlopen(request)
 
                 buffer.seek(0)
                 buffer.truncate()
