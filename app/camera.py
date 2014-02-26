@@ -7,6 +7,7 @@ import inspect
 import logging
 import math
 import operator
+import urllib2
 from PIL import Image
 from config import configuration
 
@@ -21,6 +22,7 @@ class Camera(object):
         self.image_bin = b""
         self.stream_lock = threading.RLock()
         self.difference = 0
+        self.difference_threshold = 10000
         self.start()
 
     def __del__(self):
@@ -81,6 +83,9 @@ class Camera(object):
                     self.image_bin = buffer.getvalue()
 
                 self.difference = compare(previous_image_stream, self.get_still())
+                if self.difference >= self.difference_threshold:
+                    request = urllib2.Request('http://localhost/camera/motion', {})
+                    request.add_header("Authorization", "Basic %s" % configuration.get('api_basic_auth'))
 
                 buffer.seek(0)
                 buffer.truncate()

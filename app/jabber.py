@@ -82,7 +82,7 @@ class Jabber(sleekxmpp.ClientXMPP):
                 message.reply("Who are you again?").send()
             elif 'garagecamera' in message['body'].lower():
                 request = urllib2.Request('http://localhost/camera/image')
-                request.add_header("Authorization", 'Basic YXBpdXNlcjptanU3OGlrLA==')
+                request.add_header("Authorization", "Basic %s" % configuration.get('api_basic_auth'))
                 image = urllib2.urlopen(request).read()
                 image_url = self.bucket.upload(image)
                 message.reply("Status: %s" % image_url).send()
