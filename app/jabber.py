@@ -3,6 +3,7 @@ import inspect
 import logging
 import datetime
 import urllib2
+import json
 from s3 import S3
 from config import configuration
 
@@ -86,6 +87,11 @@ class Jabber(sleekxmpp.ClientXMPP):
                 image = urllib2.urlopen(request).read()
                 image_url = self.bucket.upload(image)
                 message.reply("Status: %s" % image_url).send()
+            elif 'lastevent' in message['body'].lower():
+                request = urllib2.Request('http://localhost/camera/lastevent')
+                request.add_header("Authorization", "Basic %s" % configuration.get('api_basic_auth'))
+                last_event = json.parse(urllib2.urlopen(request).read())
+                message.reply("Last Event: %s" % last_event['seconds']).send()
             else:
                 message.reply("Command not found: %(body)s" % message).send()
 

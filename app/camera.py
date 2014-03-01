@@ -20,9 +20,9 @@ class Camera(object):
     def __init__(self):
         super(Camera, self).__init__()
         self.image_bin = b""
-        self.stream_lock = threading.RLock()
         self.difference = 0
         self.difference_threshold = 10000
+        self.last_alert = time.time() - configuration.get('cooldown_period')
         self.start()
 
     def __del__(self):
@@ -64,6 +64,9 @@ class Camera(object):
     def get_difference(self):
         return self.difference
 
+    def get_last_event(self):
+        return self.event_time
+
     def read_camera(self):
         buffer = io.BytesIO()
 
@@ -79,11 +82,14 @@ class Camera(object):
                 buffer.seek(0)
 
                 previous_image_stream = self.get_still()
-                with self.stream_lock:
-                    self.image_bin = buffer.getvalue()
+                self.image_bin = buffer.getvalue()
 
                 self.difference = compare(previous_image_stream, self.get_still())
-                if self.difference >= self.difference_threshold:
+                event_time = time.time()
+                next_event = self.last_alert + configuration.get('cooldown_period')
+
+                if (self.difference >= self.difference_threshold) and (event_time >= next_event):
+                    self.last_alert = event_time
                     request = urllib2.Request('http://localhost/camera/motion', '')
                     request.add_header("Authorization", "Basic %s" % configuration.get('api_basic_auth'))
                     urllib2.urlopen(request)

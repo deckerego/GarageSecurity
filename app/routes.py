@@ -14,7 +14,6 @@ import gpio
 import json
 import time
 import datetime
-import rangefinder
 from camera import Camera
 from jabber import Jabber
 from config import configuration
@@ -26,8 +25,6 @@ jabber = Jabber(configuration.get('xmpp_username'), configuration.get('xmpp_pass
 application = Bottle()
 application.install(camera)
 application.install(jabber)
-
-last_area_detected = None
 
 @application.route('/favicon.ico')
 def send_favicon():
@@ -54,6 +51,10 @@ def alert_motion(jabber):
 def show_image(camera):
 	response.headers['Content-Type'] = 'image/jpeg'
 	return camera.get_still()
+
+@application.get('/camera/lastevent')
+def show_image(camera):
+	return '{"seconds": %f}' % camera.get_last_event()
 
 @application.get('/camera/diff')
 def show_image(camera):
