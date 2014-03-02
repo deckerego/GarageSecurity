@@ -1,0 +1,19 @@
+import argparse
+
+config_values = {
+	'xmpp_server_host': 'talk.google.com',
+	'xmpp_server_port': '5222',
+    'xmpp_username': '@gmail.com',
+    'xmpp_password': 'password',
+    'xmpp_recipients': '@gmail.com'
+}
+
+class Configuration(object):
+    def __init__(self):
+        parser = argparse.ArgumentParser()
+        args, _ = parser.parse_known_args()
+
+    def get(self, name):
+        return config_values.get(name)
+
+configuration = Configuration()

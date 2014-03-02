@@ -1,0 +1,49 @@
+button { 
+	background-color: #aaaaaa; 
+	border-radius: 6px; 
+	border: 1px solid #aaaaaa; 
+	font-family: Arial;
+	font-size: 15px;
+	font-weight: bold;
+	font-style: normal;
+	min-height: 50px;
+	height: 100%;
+	width: 100%;
+	text-align: center;
+	text-shadow: 1px 1px 0px #aaaaaa;
+}
+
+button:active {
+	background-color:#ff0000; 
+}
+
+.buttonCell {
+	width: 50%;
+	vertical-align: center;
+}
+
+.wrapper {
+   display: table;
+   padding: 0;
+   width: 100%;
+   height: 100%;
+   position: relative;
+}
+ 
+.container {
+   display: table-cell;
+   vertical-align: top;
+}
+ 
+.canvas-container {
+   position: relative;
+   max-width: 1280px;
+   min-width: 640px;
+   margin: 0 auto;
+}
+ 
+#camera {
+   width: 100%;
+   height: auto;
+   background-color: gray;
+}

@@ -1,0 +1,48 @@
+<VirtualHost *:80>
+	WSGIDaemonProcess security user=www-data group=www-data processes=1 threads=4
+	WSGIScriptAlias / /srv/security/routes.py
+
+	ServerAdmin webmaster@localhost
+
+	Alias /media /srv/motion
+
+	AddExternalAuth pwauth /usr/sbin/pwauth
+	SetExternalAuthMethod pwauth pipe
+
+	<Directory /srv/security/>
+        	AuthType Basic
+                AuthName "Media Archive"
+                AuthBasicProvider external
+                AuthExternal pwauth
+                Require valid-user
+
+		WSGIProcessGroup security 
+        	WSGIApplicationGroup %{GLOBAL}
+	</Directory>
+
+	<Directory /srv/motion/>
+		Options Indexes Multiviews
+
+		AuthType Basic
+		AuthName "Media Archive"
+		AuthBasicProvider external
+		AuthExternal pwauth
+		Require valid-user
+	</Directory>
+
+    ProxyPass /monit http://localhost:2812
+
+    <Location /monit>
+            AuthType Basic
+            AuthName "Service Uptime"
+            AuthBasicProvider external
+            AuthExternal pwauth
+            Require valid-user
+    </Location>
+
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+
+	LogLevel warn
+
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
