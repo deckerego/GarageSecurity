@@ -29,11 +29,12 @@ Hardware
 Installation
 ------------
 
-1. Install pip using sudo apt-get install python-pip
+1. Install pip (using sudo apt-get install python-pip)
 2. Install libapache2-mod-wsgi to permit Apache to host Bottle
-3. Clone this repository or download the .ZIP, which will include the Bottle webapp and some admin configs/scripts
-4. Install BasementMonitor's dependencies using pip install -r app/pip_requirements.txt
-5. Remove terminal access from the bootloader, as described at: 
-6. Enable I2C as described at: 
-7. Copy the files within the app/ directory into /srv/monitor
-8. Add or modify config files as detailed in the admin/ directory
+3. Install pwauth and enable the authnz_external module (a2enmod authnz_external) to password protect HTTP access
+4. Clone this repository or download the .ZIP, which will include the Bottle webapp and some admin configs/scripts
+5. Install BasementMonitor's dependencies using pip install -r app/pip_requirements.txt
+6. Remove terminal access from the bootloader, as described at: 
+7. Enable I2C as described at: 
+8. Copy the files within the app/ directory into /srv/monitor
+9. Add or modify config files as detailed in the admin/ directory

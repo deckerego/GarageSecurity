@@ -10,12 +10,11 @@ logging.basicConfig(level=logging.WARN, format='%(levelname)-8s %(message)s')
 os.chdir(os.path.dirname(__file__))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), ".")))
 
-import gpio
 import json
 import time
 import datetime
 from rangefinder import Rangefinder
-from temerature import Temperature
+from temperature import Temperature
 from jabber import Jabber
 from config import configuration
 from bottle import Bottle, response, HTTPResponse, static_file, get, put, request, template
@@ -45,10 +44,10 @@ def send_css(filename):
 def dashboard():
 	return template('index')
 
-@application.post('/temperature')
+@application.post('/environment')
 def alert_motion(temperature):
 	return '{ "farenheit": -1, "humidity": -1 }'
 
 @application.get('/pumpwell')
-def show_image(camera):
-	return '{"distance": -1}'
+def show_image(rangefinder):
+	return '{"distance": %d}' % rangefinder.get_range()
