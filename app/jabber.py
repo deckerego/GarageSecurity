@@ -81,13 +81,13 @@ class Jabber(sleekxmpp.ClientXMPP):
 
             if not from_account in configuration.get('xmpp_recipients'):
                 message.reply("Who are you again?").send()
-            elif 'garagecamera' in message['body'].lower():
+            elif 'garage camera' in message['body'].lower():
                 request = urllib2.Request('http://localhost/camera/image')
                 request.add_header("Authorization", "Basic %s" % configuration.get('api_basic_auth'))
                 image = urllib2.urlopen(request).read()
                 image_url = self.bucket.upload(image)
                 message.reply("Status: %s" % image_url).send()
-            elif 'lastevent' in message['body'].lower():
+            elif 'garage lastevent' in message['body'].lower():
                 request = urllib2.Request('http://localhost/camera/lastevent')
                 request.add_header("Authorization", "Basic %s" % configuration.get('api_basic_auth'))
                 last_event = json.parse(urllib2.urlopen(request).read())
