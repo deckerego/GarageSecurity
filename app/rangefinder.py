@@ -52,7 +52,6 @@ class Rangefinder(object):
         else:
             pass
         response = self.serial_port.read(5)
-        print "Range Finder: %s" % response
         return int(response[1:])
 
 class PluginError(Exception):

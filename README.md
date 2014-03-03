@@ -35,6 +35,6 @@ Installation
 4. Clone this repository or download the .ZIP, which will include the Bottle webapp and some admin configs/scripts
 5. Install BasementMonitor's dependencies using pip install -r app/pip_requirements.txt
 6. Remove terminal access from the bootloader, as described at: 
-7. Enable I2C as described at: 
+7. Enable I2C as described at: http://www.raspberry-projects.com/pi/pi-operating-systems/raspbian/io-pins-raspbian/i2c-pins
 8. Copy the files within the app/ directory into /srv/monitor
 9. Add or modify config files as detailed in the admin/ directory

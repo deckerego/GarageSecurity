@@ -44,10 +44,11 @@ def send_css(filename):
 def dashboard():
 	return template('index')
 
-@application.post('/environment')
-def alert_motion(temperature):
-	return '{ "farenheit": -1, "humidity": -1 }'
+@application.get('/environment')
+def get_environment(temperature):
+	humidity, farenheit, status = temperature.get_conditions()
+	return '{ "humidity": %s, "farenheit": %s, "status": %s }' % (humidity, farenheit, status)
 
 @application.get('/pumpwell')
-def show_image(rangefinder):
+def get_range(rangefinder):
 	return '{"distance": %d}' % rangefinder.get_range()
