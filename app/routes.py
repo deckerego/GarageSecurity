@@ -46,8 +46,8 @@ def dashboard():
 
 @application.get('/environment')
 def get_environment(temperature):
-	humidity, farenheit, status = temperature.get_conditions()
-	return '{ "humidity": %s, "farenheit": %s, "status": %s }' % (humidity, farenheit, status)
+	humidity, celsius, status = temperature.get_conditions()
+	return '{ "relative_humidity": %s, "celsius": %s, "status": %s }' % (humidity, celsius, status)
 
 @application.get('/pumpwell')
 def get_range(rangefinder):

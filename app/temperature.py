@@ -67,9 +67,8 @@ class Temperature(object):
         # TODO precalculate these constants rather than just typing them out
         humidity = H_dat * 0.0061
         celsius = (T_dat * 0.01007) - 40.0
-        farenheit = ((celsius * 9) / 5) + 32
 
-        return (humidity, farenheit, status)
+        return (humidity, celsius, status)
 
 class PluginError(Exception):
     pass
