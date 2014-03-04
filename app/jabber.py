@@ -1,10 +1,10 @@
 import sleekxmpp
 import inspect
 import logging
-import datetime
-import urllib2
-import json
+from datetime import datetime
+import camera
 from s3 import S3
+from PIL import Image
 from config import configuration
 
 logger = logging.getLogger('garagesec')
@@ -16,6 +16,7 @@ class Jabber(sleekxmpp.ClientXMPP):
     def __init__(self, jid, password):
         super(Jabber, self).__init__(jid, password)
 
+        self.camera = None
         self.add_event_handler('session_start', self.start)
         self.add_event_handler('message', self.receive)
 
@@ -27,9 +28,9 @@ class Jabber(sleekxmpp.ClientXMPP):
         self.routes = app
 
         for other in app.plugins:
-            if not isinstance(other, Jabber):
-                continue
-            if other.keyword == self.keyword:
+            if isinstance(other, camera.Camera):
+                self.camera = other
+            elif isinstance(other, Jabber) and other.keyword == self.keyword:
                 raise PluginError("Found another instance of Jabber running!")
 
         host = configuration.get('xmpp_server_host')
@@ -80,20 +81,16 @@ class Jabber(sleekxmpp.ClientXMPP):
             logger.info("Received message from %s" % from_account)
 
             if not from_account in configuration.get('xmpp_recipients'):
-                message.reply("Who are you again?").send()
+                logger.warn("Received message from non-whitelist user %s: %s" % (from_account, message['body']))
             elif 'garage camera' in message['body'].lower():
-                request = urllib2.Request('http://localhost/camera/image')
-                request.add_header("Authorization", "Basic %s" % configuration.get('api_basic_auth'))
-                image = urllib2.urlopen(request).read()
-                image_url = self.bucket.upload(image)
+                image_bin = self.camera.get_still()
+                image_url = self.bucket.upload(image_bin.getvalue())
                 message.reply("Status: %s" % image_url).send()
             elif 'garage lastevent' in message['body'].lower():
-                request = urllib2.Request('http://localhost/camera/lastevent')
-                request.add_header("Authorization", "Basic %s" % configuration.get('api_basic_auth'))
-                last_event = json.parse(urllib2.urlopen(request).read())
-                message.reply("Last Event: %s" % last_event['seconds']).send()
+                last_event_seconds = self.camera.get_last_event()
+                message.reply("Last Event: %s" % datetime.fromtimestamp(last_event_seconds)).send()
             else:
-                message.reply("Command not found: %(body)s" % message).send()
+                logger.info("Uncaught command from %s: %s" % (from_account, message['body']))
 
 class PluginError(Exception):
     pass

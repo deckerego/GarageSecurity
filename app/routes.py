@@ -42,11 +42,6 @@ def send_css(filename):
 def dashboard():
 	return template('index')
 
-@application.post('/camera/motion')
-def alert_motion(jabber):
-	jabber.send_recipients("Motion detected on camera")
-	return '{ "rms": -1 }'
-
 @application.get('/camera/image')
 def show_image(camera):
 	response.headers['Content-Type'] = 'image/jpeg'

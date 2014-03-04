@@ -7,7 +7,7 @@ import inspect
 import logging
 import math
 import operator
-import urllib2
+import jabber
 from PIL import Image
 from config import configuration
 
@@ -23,6 +23,7 @@ class Camera(object):
         self.difference = 0
         self.difference_threshold = 10000
         self.last_alert = time.time() - configuration.get('cooldown_period')
+        self.jabber = None
         self.start()
 
     def __del__(self):
@@ -33,9 +34,9 @@ class Camera(object):
         self.routes = app
 
         for other in app.plugins:
-            if not isinstance(other, Camera):
-                continue
-            if other.keyword == self.keyword:
+            if isinstance(other, jabber.Jabber):
+                self.jabber = other
+            elif isinstance(other, Camera) and other.keyword == self.keyword:
                 raise PluginError("Found another instance of Camera running!")
 
     # This is invoked within Bottle as part of each route when installed
@@ -65,7 +66,7 @@ class Camera(object):
         return self.difference
 
     def get_last_event(self):
-        return self.event_time
+        return self.last_alert
 
     def read_camera(self):
         buffer = io.BytesIO()
@@ -75,8 +76,6 @@ class Camera(object):
             camera.vflip = True
             camera.hflip = True
             camera.exposure_mode = 'night'
-            camera.start_preview()
-            time.sleep(2)
 
             for nothing in camera.capture_continuous(buffer, format='jpeg', use_video_port=True):
                 buffer.seek(0)
@@ -90,9 +89,7 @@ class Camera(object):
 
                 if (self.difference >= self.difference_threshold) and (event_time >= next_event):
                     self.last_alert = event_time
-                    request = urllib2.Request('http://localhost/camera/motion', '')
-                    request.add_header("Authorization", "Basic %s" % configuration.get('api_basic_auth'))
-                    urllib2.urlopen(request)
+                    self.jabber.send_recipients("Motion detected on camera at %s" % self.last_alert)
 
                 buffer.seek(0)
                 buffer.truncate()

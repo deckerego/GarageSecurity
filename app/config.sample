@@ -10,7 +10,6 @@ config_values = {
     'aws_secret': 'secretkey',
     's3_bucket': 'bucketname',
     's3_url_expiry': 60',
-    'api_basic_auth': 'AABBCCDDEEFFaabbccddee==',
     'cooldown_period': 600
 }
 
