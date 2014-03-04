@@ -5,7 +5,8 @@ config_values = {
 	'xmpp_server_port': '5222',
     'xmpp_username': '@gmail.com',
     'xmpp_password': 'password',
-    'xmpp_recipients': '@gmail.com'
+    'xmpp_recipients': '@gmail.com',
+    'rangefinder_tty': '/dev/ttyAMA0'
 }
 
 class Configuration(object):

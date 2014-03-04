@@ -1,9 +1,11 @@
+# -*- coding: utf-8 -*-
+
 import sleekxmpp
 import inspect
 import logging
 import datetime
-import urllib2
-import json
+from rangefinder import Rangefinder
+from temperature import Temperature
 from config import configuration
 
 logger = logging.getLogger('basemon')
@@ -15,6 +17,8 @@ class Jabber(sleekxmpp.ClientXMPP):
     def __init__(self, jid, password):
         super(Jabber, self).__init__(jid, password)
 
+        self.temperature = None
+        self.rangefinder = None
         self.add_event_handler('session_start', self.start)
         self.add_event_handler('message', self.receive)
 
@@ -26,9 +30,11 @@ class Jabber(sleekxmpp.ClientXMPP):
         self.routes = app
 
         for other in app.plugins:
-            if not isinstance(other, Jabber):
-                continue
-            if other.keyword == self.keyword:
+            if isinstance(other, Rangefinder):
+                self.rangefinder = other
+            elif isinstance(other, Temperature):
+                self.temperature = other
+            elif isinstance(other, Jabber) and other.keyword == self.keyword:
                 raise PluginError("Found another instance of Jabber running!")
 
         host = configuration.get('xmpp_server_host')
@@ -77,9 +83,15 @@ class Jabber(sleekxmpp.ClientXMPP):
             logger.info("Received message from %s" % from_account)
 
             if not from_account in configuration.get('xmpp_recipients'):
-                message.reply("Who are you again?").send()
+                logger.warn("Received message from non-whitelist user %s: %s" % (from_account, message['body']))
+            elif 'basement climate' in message['body'].lower():
+                humidity, celsius, status = self.temperature.get_conditions()
+                farenheit = ((celsius * 9) / 5) + 32
+                message.reply("%s ˚F %s Humidity" % (farenheit, humidity)).send()
+            elif 'basement depth' in message['body'].lower():
+                message.reply("Well Depth: %s cm" % self.rangefinder.get_range()).send()
             else:
-                message.reply("Command not found: %(body)s" % message).send()
+                logger.info("Uncaught command from %s: %s" % (from_account, message['body']))
 
 class PluginError(Exception):
     pass
