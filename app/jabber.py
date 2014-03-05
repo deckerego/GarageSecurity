@@ -28,9 +28,7 @@ class Jabber(sleekxmpp.ClientXMPP):
         self.routes = app
 
         for other in app.plugins:
-            if isinstance(other, camera.Camera):
-                self.camera = other
-            elif isinstance(other, Jabber) and other.keyword == self.keyword:
+            if isinstance(other, Jabber) and other.keyword == self.keyword:
                 raise PluginError("Found another instance of Jabber running!")
 
         host = configuration.get('xmpp_server_host')
@@ -65,6 +63,13 @@ class Jabber(sleekxmpp.ClientXMPP):
         self.send_presence()
         self.get_roster()
 
+    def get_camera(self):
+        if not self.camera:
+            for other in self.routes.plugins:
+                if isinstance(other, camera.Camera):
+                    self.camera = other
+        return self.camera
+
     def send_recipients(self, body):
         message = self.Message()
         message['to'] = configuration.get('xmpp_recipients')
@@ -83,11 +88,11 @@ class Jabber(sleekxmpp.ClientXMPP):
             if not from_account in configuration.get('xmpp_recipients'):
                 logger.warn("Received message from non-whitelist user %s: %s" % (from_account, message['body']))
             elif 'garage camera' in message['body'].lower():
-                image_bin = self.camera.get_still()
+                image_bin = self.get_camera().get_still()
                 image_url = self.bucket.upload(image_bin.getvalue())
                 message.reply("Status: %s" % image_url).send()
             elif 'garage lastevent' in message['body'].lower():
-                last_event_seconds = self.camera.get_last_event()
+                last_event_seconds = self.get_camera().get_last_event()
                 message.reply("Last Event: %s" % datetime.fromtimestamp(last_event_seconds)).send()
             else:
                 logger.info("Uncaught command from %s: %s" % (from_account, message['body']))

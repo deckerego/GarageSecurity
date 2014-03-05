@@ -22,7 +22,8 @@ class Camera(object):
         self.image_bin = b""
         self.difference = 0
         self.difference_threshold = 10000
-        self.last_alert = time.time() - configuration.get('cooldown_period')
+        # Give the camera 10 seconds to warm up
+        self.last_alert = time.time() - configuration.get('cooldown_period') + 10
         self.jabber = None
         self.start()
 
@@ -34,9 +35,7 @@ class Camera(object):
         self.routes = app
 
         for other in app.plugins:
-            if isinstance(other, jabber.Jabber):
-                self.jabber = other
-            elif isinstance(other, Camera) and other.keyword == self.keyword:
+            if isinstance(other, Camera) and other.keyword == self.keyword:
                 raise PluginError("Found another instance of Camera running!")
 
     # This is invoked within Bottle as part of each route when installed
@@ -61,6 +60,13 @@ class Camera(object):
 
     def get_still(self):
         return io.BytesIO(self.image_bin)
+
+    def get_jabber(self):
+        if not self.jabber:
+            for other in self.routes.plugins:
+                if isinstance(other, jabber.Jabber):
+                    self.jabber = other
+        return self.jabber
 
     def get_difference(self):
         return self.difference
@@ -89,7 +95,7 @@ class Camera(object):
 
                 if (self.difference >= self.difference_threshold) and (event_time >= next_event):
                     self.last_alert = event_time
-                    self.jabber.send_recipients("Motion detected on camera at %s" % self.last_alert)
+                    self.get_jabber().send_recipients("Motion detected on camera at %s" % self.last_alert)
 
                 buffer.seek(0)
                 buffer.truncate()
