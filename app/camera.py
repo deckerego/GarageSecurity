@@ -84,21 +84,24 @@ class Camera(object):
             camera.exposure_mode = 'night'
 
             for nothing in camera.capture_continuous(buffer, format='jpeg', use_video_port=True):
-                buffer.seek(0)
+                try:
+                    buffer.seek(0)
 
-                previous_image_stream = self.get_still()
-                self.image_bin = buffer.getvalue()
+                    previous_image_stream = self.get_still()
+                    self.image_bin = buffer.getvalue()
 
-                self.difference = compare(previous_image_stream, self.get_still())
-                event_time = time.time()
-                next_event = self.last_alert + configuration.get('cooldown_period')
+                    self.difference = compare(previous_image_stream, self.get_still())
+                    event_time = time.time()
+                    next_event = self.last_alert + configuration.get('cooldown_period')
 
-                if (self.difference >= self.difference_threshold) and (event_time >= next_event):
-                    self.last_alert = event_time
-                    self.get_jabber().send_recipients("Motion detected on camera at %s" % self.last_alert)
+                    if (self.difference >= self.difference_threshold) and (event_time >= next_event):
+                        self.last_alert = event_time
+                        self.get_jabber().send_recipients("Motion detected on camera at %s" % self.last_alert)
 
-                buffer.seek(0)
-                buffer.truncate()
+                    buffer.seek(0)
+                    buffer.truncate()
+                except:
+                    logger.error("Unexpected error: %s" % sys.exc_info()[0])
 
 def compare(stream1, stream2):
     rms = -1
