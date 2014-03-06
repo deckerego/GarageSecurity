@@ -1,6 +1,7 @@
 import serial
 import inspect
 import logging
+import re
 from config import configuration
 
 logger = logging.getLogger('basemon')
@@ -8,6 +9,7 @@ logger = logging.getLogger('basemon')
 class Rangefinder(object):
     name = 'rangefinder'
     keyword = 'rangefinder'
+    regex = re.compile('\d+')
 
     def __init__(self):
         super(Rangefinder, self).__init__()
@@ -52,7 +54,9 @@ class Rangefinder(object):
         else:
             pass
         response = self.serial_port.read(5)
-        return int(response[1:])
+
+        matches = self.regex.findall(response[1:])
+        return int(matches[0])
 
 class PluginError(Exception):
     pass
