@@ -6,6 +6,10 @@ A web interface for monitoring sump pump well levels, temperature and humidity. 
 Hardware
 --------
 
+Hardware setup is described at http://blog.deckerego.net/2014/03/its-basement-not-swimming-pool.html
+
+Build components include:
+
 <table>
   <tr>
     <td>Raspberry Pi Model A</td>
@@ -20,7 +24,7 @@ Hardware
     <td>http://www.maxbotix.com/documents/XL-MaxSonar-EZ_Datasheet.pdf</td>
   </tr>
   <tr>
-    <td>Resistors, NPN transistors, NPN MOSFET</td>
+    <td>Resistors, NPN transistors, NPN MOSFET, wire</td>
     <td>Available at Sparkfun, Adafruit, Radio Shack or from de-soldering unused electronics.</td>
   </tr>
 </table>
