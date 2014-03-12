@@ -10,6 +10,9 @@ logger = logging.getLogger('basemon')
 class Temperature(object):
     name = 'temperature'
     keyword = 'temperature'
+    sensor_max = 16383
+    temp_min = -40
+    temp_range = 165
 
     def __init__(self):
         super(Temperature, self).__init__()
@@ -53,20 +56,14 @@ class Temperature(object):
         self.bus.write_quick(self.address)
         time.sleep(0.1)
 
-        Hum_H = self.bus.read_byte(self.address);
-        Hum_L = self.bus.read_byte(self.address);
-        Temp_H = self.bus.read_byte(self.address);
-        Temp_L = self.bus.read_byte(self.address);
+        val = self.bus.read_i2c_block_data(self.address, 0, 4)
 
-        status = (Hum_H >> 6) & 0x03;
-        Hum_H = Hum_H & 0x3f;
-        H_dat = (Hum_H << 8) | Hum_L;
-        T_dat = (Temp_H << 8) | Temp_L;
-        T_dat = T_dat / 4;
+        status = val[0] >> 6 # 2 bits for status
+        H_dat = ((val[0] & 0x3f) << 8 )+ val[1] # 14 bits for humidity
+        T_dat = (val[2] << 6) + (val[3] >> 2) # 14 bits for temperature
 
-        # TODO precalculate these constants rather than just typing them out
-        humidity = H_dat * 0.0061
-        celsius = (T_dat * 0.01007) - 40.0
+        humidity = (float(H_dat) / float(self.sensor_max)) * 100
+        celsius = ((float(T_dat) / float(self.sensor_max)) * self.temp_range) + self.temp_min
 
         return (humidity, celsius, status)
 

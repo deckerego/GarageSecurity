@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8" />
 		<link rel="stylesheet" href="css/styles.css" type="text/css" />
-		<script type="text/javascript" src="js/stats.js?version=0"></script>
+		<script type="text/javascript" src="js/stats.js?version=1"></script>
 	</head>
 
 	<body>
