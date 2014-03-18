@@ -8,6 +8,7 @@ import logging
 import math
 import operator
 import jabber
+import sys
 from PIL import Image
 from config import configuration
 
@@ -96,7 +97,7 @@ class Camera(object):
 
                     if (self.difference >= self.difference_threshold) and (event_time >= next_event):
                         self.last_alert = event_time
-                        self.get_jabber().send_recipients("Motion detected on camera at %s" % self.last_alert)
+                        self.get_jabber().send_alert()
 
                     buffer.seek(0)
                     buffer.truncate()

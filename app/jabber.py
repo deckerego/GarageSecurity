@@ -79,6 +79,10 @@ class Jabber(sleekxmpp.ClientXMPP):
         logger.debug("Sending message: %s" % message)
         message.send()
 
+    def send_alert(self):
+        last_event_seconds = self.get_camera().get_last_event()
+        self.send_recipients("Motion detected on camera at %s" % datetime.fromtimestamp(last_event_seconds))
+
     def receive(self, message):
         if message['type'] in ('chat', 'normal'):
             logger.debug("XMPP Message: %s" % message)

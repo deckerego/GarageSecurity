@@ -7,3 +7,4 @@ picamera>=1.2
 pyserial>=2.7
 boto>=2.25.0
 PIL>=1.1.7
+pyotp>=1.4
