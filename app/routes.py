@@ -13,19 +13,19 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "."))
 import json
 import time
 import datetime
-from rangefinder import Rangefinder
+from detector import Detector
 from temperature import Temperature
 from jabber import Jabber
 from config import configuration
 from bottle import Bottle, response, HTTPResponse, static_file, get, put, request, template
 
 temperature = Temperature()
-rangefinder = Rangefinder()
+detector = Detector()
 jabber = Jabber(configuration.get('xmpp_username'), configuration.get('xmpp_password'))
 
 application = Bottle()
 application.install(temperature)
-application.install(rangefinder)
+application.install(detector)
 application.install(jabber)
 
 @application.route('/favicon.ico')
@@ -50,5 +50,5 @@ def get_environment(temperature):
 	return '{ "relative_humidity": %s, "celsius": %s, "status": %s }' % (humidity, celsius, status)
 
 @application.get('/pumpwell')
-def get_range(rangefinder):
-	return '{"distance": %d}' % rangefinder.get_range()
+def get_detected(detector):
+	return '{"detected": "%r"}' % detector.detection()

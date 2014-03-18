@@ -4,7 +4,7 @@ import sleekxmpp
 import inspect
 import logging
 import datetime
-from rangefinder import Rangefinder
+from detector import Detector
 from temperature import Temperature
 from config import configuration
 
@@ -18,9 +18,10 @@ class Jabber(sleekxmpp.ClientXMPP):
         super(Jabber, self).__init__(jid, password)
 
         self.temperature = None
-        self.rangefinder = None
-        self.add_event_handler('session_start', self.start)
-        self.add_event_handler('message', self.receive)
+        self.detector = None
+        # FIXME It appears only one session is permitted at a time with SleekXMPP
+        #self.add_event_handler('session_start', self.start)
+        #self.add_event_handler('message', self.receive)
 
     def __del__(self):
         self.close()
@@ -30,8 +31,8 @@ class Jabber(sleekxmpp.ClientXMPP):
         self.routes = app
 
         for other in app.plugins:
-            if isinstance(other, Rangefinder):
-                self.rangefinder = other
+            if isinstance(other, Detector):
+                self.detector = other
             elif isinstance(other, Temperature):
                 self.temperature = other
             elif isinstance(other, Jabber) and other.keyword == self.keyword:
@@ -88,8 +89,6 @@ class Jabber(sleekxmpp.ClientXMPP):
                 humidity, celsius, status = self.temperature.get_conditions()
                 farenheit = ((celsius * 9) / 5) + 32
                 message.reply("%s ˚F %s Humidity" % (farenheit, humidity)).send()
-            elif 'basement depth' in message['body'].lower():
-                message.reply("Well Depth: %s cm" % self.rangefinder.get_range()).send()
             else:
                 logger.info("Uncaught command from %s: %s" % (from_account, message['body']))
 

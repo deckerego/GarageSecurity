@@ -1,18 +1,19 @@
-import serial
 import inspect
 import logging
-import re
+import wiringpi
 from config import configuration
 
 logger = logging.getLogger('basemon')
 
-class Rangefinder(object):
-    name = 'rangefinder'
-    keyword = 'rangefinder'
-    regex = re.compile('\d+')
+class Detector(object):
+    name = 'detector'
+    keyword = 'detector'
+    detector_pin = 17
+
 
     def __init__(self):
-        super(Rangefinder, self).__init__()
+        super(Detector, self).__init__()
+        self.gpio = None
         self.start()
 
     def __del__(self):
@@ -23,10 +24,10 @@ class Rangefinder(object):
         self.routes = app
 
         for other in app.plugins:
-            if not isinstance(other, Rangefinder):
+            if not isinstance(other, Detector):
                 continue
             if other.keyword == self.keyword:
-                raise PluginError("Found another instance of Rangefinder running!")
+                raise PluginError("Found another instance of Detector running!")
 
     # This is invoked within Bottle as part of each route when installed
     def apply(self, callback, route):
@@ -42,23 +43,17 @@ class Rangefinder(object):
 
     # De-installation from Bottle as a plugin
     def close(self):
-        logger.info("Closing Rangefinder Connection")
+        logger.info("Closing Detector Connection")
         
     def start(self):
-        logger.info("Opening Rangefinder Connection")
-        self.serial_port = serial.Serial(configuration.get('rangefinder_tty'), 9600, timeout=2, bytesize=8, parity='N', stopbits=1)
+        logger.info("Opening Detector Connection")
+        self.gpio = wiringpi.GPIO(wiringpi.GPIO.WPI_MODE_SYS)
+        self.gpio.pinMode(self.detector_pin, self.gpio.INPUT)        
 
-    def get_range(self):
-        if self.serial_port.isOpen()== False:
-            self.serial_port.open()
-        else:
-            pass
-        response = self.serial_port.read(5)
-
-        matches = self.regex.findall(response[1:])
-        return int(matches[0])
+    def detection(self):
+        return self.gpio.digitalRead(self.detector_pin) != 1
 
 class PluginError(Exception):
     pass
 
-Plugin = Rangefinder
+Plugin = Detector

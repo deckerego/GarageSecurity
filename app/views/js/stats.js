@@ -14,13 +14,13 @@ function getTempHumidity(url, tempId, humidId) {
   request.send();
 }
 
-function getDepth(url, depthId) {
+function getDetector(url, depthId) {
   var request = new XMLHttpRequest();
   request.open("GET", url, true);
 
   request.onload = function(evt) {
     response = JSON.parse(request.responseText);
-    document.getElementById(depthId).innerHTML = response.distance;
+    document.getElementById(depthId).innerHTML = response.detected;
   };
 
   request.send();

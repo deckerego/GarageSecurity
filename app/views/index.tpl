@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8" />
 		<link rel="stylesheet" href="css/styles.css" type="text/css" />
-		<script type="text/javascript" src="js/stats.js?version=1"></script>
+		<script type="text/javascript" src="js/stats.js?version=4"></script>
 	</head>
 
 	<body>
@@ -17,14 +17,14 @@
 				<td><span id="humidity"></span>%</td>
 			</tr>
 			<tr>
-				<td>Well Depth:</td>
-				<td><span id="depth"></span> cm</td>
+				<td>Water Alert:</td>
+				<td><span id="detected"></span></td>
 			</tr>
 		</table>
 
 		<script type="text/javascript">
 			getTempHumidity('/environment', 'temperature', 'humidity')
-			getDepth('/pumpwell', 'depth')
+			getDetector('/pumpwell', 'detected')
 		</script>
 	</body>
 </html>
