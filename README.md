@@ -1,7 +1,7 @@
 GarageSecurity
 ==============
 
-A web interface for remote residential garage surveillance. This uses a Raspberry Pi to connect to a universal garage door opener via GPIO and a Raspberry NoIR video camera. 
+A web interface for remote residential garage surveillance. This uses a Raspberry Pi to connect to a universal garage door opener via GPIO and a Raspberry NoIR video camera.
 
 Hardware
 --------
@@ -45,11 +45,12 @@ Installation
   2. sudo ln -s /usr/lib/arm-linux-gnueabihf/libz.so /usr/lib/libz.so
   3. sudo ln -s /usr/lib/arm-linux-gnueabihf/libjpeg.so /usr/lib/libjpeg.so
   4. sudo ln -s /usr/lib/arm-linux-gnueabihf/libfreetype.so /usr/lib/libfreetype.so
-6. Install GarageSecurity's dependencies using pip install -r app/pip_requirements.txt
+6. Install GarageSecurity's dependencies using pip install -r app/requirements.txt
 7. Expose the GPIO port you connect the garage door opener to using the WiringPi GPIO Utility, e.g. gpio export 17 out
 8. Allow www-data to access the GPIO port by adding it to the gpio user group in /etc/group
 9. Allow www-data to access the Raspberry Pi camera by adding it to the video user group in /etc/group
 10. Copy the files within the app/ directory into /srv/security
-11. Add or modify config files as detailed in the admin/ directory
+11. Add or modify config files as detailed in the config/ directory
+12. Modify the config.sample file in the /srv/security directory and save it as config.py
 
 More details are available at http://blog.deckerego.net/search/label/garage%20door
