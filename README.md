@@ -1,19 +1,42 @@
 GarageSecurity
 ==============
 
-A front-end to the Motion subsystem and Raspberry Pi GPIO, used for remote residential garage surveillance.
+A web interface for remote residential garage surveillance. This uses a Raspberry Pi to connect to a universal garage door opener via GPIO and a webcam or Raspberry NoIR video camera.
 
+Hardware Punch List
+-------------------
 
-Setup
------
+<table>
+  <tr>
+    <td>Raspberry Pi Model B</td>
+    <td>https://www.sparkfun.com/products/11546</td>
+  </tr>
+  <tr>
+    <td>Raspberry Pi NoIR Camera (or a spare Video4Linux-compliant webcam)</td>
+    <td>https://www.sparkfun.com/products/12654</td>
+  </tr>
+  <tr>
+    <td>Chamberlain Universal Garage Remote</td>
+    <td>http://www.chamberlain.com/clicker-and-accessories/universal-clicker-products/clicker-universal-remote-control</td>
+  </tr>
+  <tr>
+    <td>Resistors, NPN transistors, NPN MOSFET</td>
+    <td>Available at Sparkfun, Adafruit, Radio Shack or from de-soldering unused electronics.</td>
+  </tr>
+</table>
 
-Hardware setup is available at: http://blog.deckerego.net/2013/10/your-barn-door-is-open.html
+Security & OS Setup
+-------------------
 
-Setting up Ubuntu for the app is detailed at: http://blog.deckerego.net/2013/10/your-barn-door-is-off-its-hinges.html
+Debian setup and some basic security pointers are detailed at: http://blog.deckerego.net/2013/10/your-barn-door-is-off-its-hinges.html
 
+Hardware Installation
+---------------------
 
-Installation
-------------
+See http://hackaday.io/project/2049/instructions for hardware installation
+
+Software Installation
+---------------------
 
 1. Install python-distribute to obtain Python's easy_install
 2. Install pip using easy_install (how meta) for updating application dependencies
@@ -26,5 +49,3 @@ Installation
 9. Allow www-data to access the GPIO port by adding it to the gpio user group in /etc/group
 10. Copy the files within the app/ directory into /srv/security
 11. Add or modify config files as detailed in the admin/ directory
-
-More details are available at http://blog.deckerego.net/2013/10/your-barn-door-is-on-display.html
