@@ -2,5 +2,5 @@
 	"file": "MOTION_FILE_NAME",
 	"pixels_detected": MOTION_PIXELS_DETECTED,
 	"event_time": MOTION_SECONDS_SINCE_EPOCH,
-	"event_number": MOTION_EVENT_NUMBER
+	"event_number": "MOTION_EVENT_NUMBER"
 }

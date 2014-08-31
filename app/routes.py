@@ -18,6 +18,8 @@ from jabber import Jabber
 from config import configuration
 from bottle import Bottle, HTTPResponse, static_file, get, put, request, template
 
+instance_name = configuration.get('instance_name')
+
 jabber_service = Jabber(configuration.get('xmpp_username'), configuration.get('xmpp_password'))
 
 application = Bottle()
@@ -74,7 +76,7 @@ def area_detected(jabber):
 	date_time = time.localtime(motion_event['event_time'])
 	time_string = time.strftime('%a, %d %b %Y %H:%M:%S', date_time)
 
-	jabber.send_recipients('Motion in Garage Area Detected at %s' % time_string)
+	jabber.send_recipients('Motion in %s Detected at %s' % (instance_name, time_string))
 
 	return request.body.getvalue()
 

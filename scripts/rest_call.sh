@@ -13,4 +13,4 @@ PUT=`echo $PUT | sed s/MOTION_PIXELS_DETECTED/$PIXELS/`
 PUT=`echo $PUT | sed s/MOTION_SECONDS_SINCE_EPOCH/$TIME_EPOCH/`
 PUT=`echo $PUT | sed s/MOTION_EVENT_NUMBER/$EVENT_NUMBER/`
 
-curl -u "$API_USER:$API_PASS" -H "Content-Type: application/json" -X PUT -d "$PUT" "$API_URL"
+curl -u "$API_USER:$API_PASS" -H "Content-Type: application/json" -XPUT -d "$PUT" "$API_URL"

@@ -1,26 +1,26 @@
 <VirtualHost *:80>
 	WSGIDaemonProcess security user=www-data group=www-data processes=1 threads=4
-	WSGIScriptAlias / /srv/security/routes.py
+	WSGIScriptAlias / /srv/app/routes.py
 
 	ServerAdmin webmaster@localhost
 
-	Alias /media /srv/motion
+	Alias /media /home/motion
 
 	AddExternalAuth pwauth /usr/sbin/pwauth
 	SetExternalAuthMethod pwauth pipe
 
-	<Directory /srv/security/>
+	<Directory /srv/app/>
         	AuthType Basic
                 AuthName "Media Archive"
                 AuthBasicProvider external
                 AuthExternal pwauth
                 Require valid-user
 
-		WSGIProcessGroup security 
+		WSGIProcessGroup security
         	WSGIApplicationGroup %{GLOBAL}
 	</Directory>
 
-	<Directory /srv/motion/>
+	<Directory /home/motion/>
 		Options Indexes Multiviews
 
 		AuthType Basic

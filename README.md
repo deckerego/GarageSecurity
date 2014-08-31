@@ -38,13 +38,13 @@ See http://hackaday.io/project/2049/instructions for hardware installation
 Software Installation
 ---------------------
 
-1. Install python-distribute to obtain Python's easy_install
-2. Install pip using easy_install (how meta) for updating application dependencies
-3. Install libapache2-mod-wsgi to permit Apache to host Bottle
-4. Install libapache2-mod-proxy to proxy the MJPEG webcamm feed through Apache
-5. Clone this repository or download the .ZIP, which will include the Bottle webapp and some admin configs/scripts
-6. Install GarageSecurity's dependencies using pip install -r app/pip_requirements.txt
-7. Expose the GPIO port you connect the garage door opener to using the WiringPi GPIO Utility, e.g. gpio export 17 out
-8. Allow www-data to access the GPIO port by adding it to the gpio user group in /etc/group
-9. Copy the files within the app/ directory into /srv/security
-10. Add or modify config files as detailed in the admin/ directory
+1. sudo apt-get install python-distribute python-dev libapache2-mod-wsgi libapache2-mod-proxy-html
+2. sudo easy_install pip
+3. Clone this repository or download the .ZIP, which will include the Bottle webapp and some admin configs/scripts
+4. Install GarageSecurity's dependencies using pip install -r app/requirements.txt
+5. Expose the GPIO port you connect the garage door opener to using the WiringPi GPIO Utility, e.g. gpio export 17 out
+6. Allow www-data to access the GPIO port by adding it to the gpio user group in /etc/group
+7. Copy the files within the app/ directory into /srv/app
+8. Copy the service config files from config/etc into the appropriate /etc directory, altering them as needed
+9. Create a copy of app/config.sample as /srv/app/config.py, altering config.py to fit your preferences
+10. Start up (or restart) Apache2

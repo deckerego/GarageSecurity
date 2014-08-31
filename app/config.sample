@@ -1,6 +1,7 @@
 import argparse
 
 config_values = {
+		'instance_name': 'Garage',
 		'xmpp_server_host': 'talk.google.com',
 		'xmpp_server_port': '5222',
     'xmpp_username': '@gmail.com',
