@@ -26,6 +26,8 @@ setup(
     ],
     keywords='motion security surveillance garage remote raspberrypi',
     requires=[
-        'bottle (==0.10.11)'
+        'bottle (==0.10.11)',
+        'wiringpi (>=1.0.5)',
+        'sleekxmpp (>=1.0)'
     ],
 	)

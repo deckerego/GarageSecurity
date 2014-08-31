@@ -1,15 +1,18 @@
 import argparse
 
 config_values = {
-	'xmpp_server_host': 'talk.google.com',
-	'xmpp_server_port': '5222',
+		'instance_name': 'Garage',
+		'xmpp_server_host': 'talk.google.com',
+		'xmpp_server_port': '5222',
     'xmpp_username': '@gmail.com',
     'xmpp_password': 'password',
     'xmpp_recipients': '@gmail.com',
     'webcam_host': 'localhost',
     'webcam_port': 8081,
-    'vision_template_image': 'closed_template.jpg', 
-    'vision_template_coords': (153, 2)
+    'aws_key': 'accesskey',
+    'aws_secret': 'secretkey',
+    's3_bucket': 'bucketname',
+    's3_url_expiry': 60
 }
 
 class Configuration(object):

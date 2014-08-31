@@ -2,12 +2,10 @@ import sleekxmpp
 import inspect
 import logging
 import datetime
+from s3 import S3
 from config import configuration
-from vision import Vision
 
 logger = logging.getLogger('garagesec')
-#FIXME There is definitely a better way to share a vision service than to have two running instantiations....
-vision_service = Vision(configuration.get('webcam_host'), configuration.get('webcam_port'))
 
 class Jabber(sleekxmpp.ClientXMPP):
     name = 'jabber_xmpp'
@@ -42,6 +40,8 @@ class Jabber(sleekxmpp.ClientXMPP):
         else:
             raise Exception("Unable to connect to Google Jabber server")
 
+        self.bucket = S3()
+
     # This is invoked within Bottle as part of each route when installed
     def apply(self, callback, context):
         conf = context.config.get('jabber') or {}
@@ -61,7 +61,7 @@ class Jabber(sleekxmpp.ClientXMPP):
     def close(self):
         logger.info("Closing XMPP Connection")
         self.disconnect(wait=False)
-        
+
     def start(self, event):
         self.send_presence()
         self.get_roster()
@@ -82,17 +82,17 @@ class Jabber(sleekxmpp.ClientXMPP):
         if message['type'] in ('chat', 'normal'):
             logger.debug("XMPP Message: %s" % message)
 
-            if 'door' in message['body'].lower():
-                template_image = configuration.get('vision_template_image')
-                template_coords = configuration.get('vision_template_coords')
-                template_margin = configuration.get('vision_template_margin')
-                
-                is_closed, location = vision_service.look_if_closed(template_image, template_coords, template_margin)
-                message.reply("Door is closed: %s" % is_closed).send()
-            elif 'status' in message['body'].lower():
-                message.reply("Last alert: %s" % self.last_alert).send()
+            if not from_account in configuration.get('xmpp_recipients'):
+                logger.warn("Received message from non-whitelist user %s: %s" % (from_account, message['body']))
+            elif 'garage camera' in message['body'].lower():
+                image_bin = self.get_camera().get_still()
+                image_url = self.bucket.upload(image_bin.getvalue())
+                message.reply("Status: %s" % image_url).send()
+            elif 'garage lastevent' in message['body'].lower():
+                last_event_seconds = self.get_camera().get_last_event()
+                message.reply("Last Event: %s" % datetime.fromtimestamp(self.last_alert)).send()
             else:
-                message.reply("Command not found: %(body)s" % message).send()
+                logger.info("Uncaught command from %s: %s" % (from_account, message['body']))
 
 class PluginError(Exception):
     pass
