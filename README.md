@@ -40,12 +40,11 @@ Software Installation
 
 1. Install python-distribute to obtain Python's easy_install
 2. Install pip using easy_install (how meta) for updating application dependencies
-3. Install OpenCV and its Python libraries (see http://docs.opencv.org/doc/tutorials/introduction/table_of_content_introduction/table_of_content_introduction.html)
-4. Install libapache2-mod-wsgi to permit Apache to host Bottle
-5. Install libapache2-mod-proxy to proxy the MJPEG webcamm feed through Apache
-6. Clone this repository or download the .ZIP, which will include the Bottle webapp and some admin configs/scripts
-7. Install GarageSecurity's dependencies using pip install -r app/pip_requirements.txt
-8. Expose the GPIO port you connect the garage door opener to using the WiringPi GPIO Utility, e.g. gpio export 17 out
-9. Allow www-data to access the GPIO port by adding it to the gpio user group in /etc/group
-10. Copy the files within the app/ directory into /srv/security
-11. Add or modify config files as detailed in the admin/ directory
+3. Install libapache2-mod-wsgi to permit Apache to host Bottle
+4. Install libapache2-mod-proxy to proxy the MJPEG webcamm feed through Apache
+5. Clone this repository or download the .ZIP, which will include the Bottle webapp and some admin configs/scripts
+6. Install GarageSecurity's dependencies using pip install -r app/pip_requirements.txt
+7. Expose the GPIO port you connect the garage door opener to using the WiringPi GPIO Utility, e.g. gpio export 17 out
+8. Allow www-data to access the GPIO port by adding it to the gpio user group in /etc/group
+9. Copy the files within the app/ directory into /srv/security
+10. Add or modify config files as detailed in the admin/ directory

@@ -14,13 +14,11 @@ import gpio
 import json
 import time
 import datetime
-from vision import Vision
 from jabber import Jabber
 from config import configuration
 from bottle import Bottle, HTTPResponse, static_file, get, put, request, template
 
 jabber_service = Jabber(configuration.get('xmpp_username'), configuration.get('xmpp_password'))
-vision_service = Vision(configuration.get('webcam_host'), configuration.get('webcam_port'))
 
 application = Bottle()
 application.install(jabber_service)
@@ -46,16 +44,6 @@ def dashboard():
 @application.get('/status')
 def show_status():
 	return '{ "last_area_detected": %s }' % last_area_detected
-
-@application.get('/door')
-def door_status():
-	template_image = configuration.get('vision_template_image')
-	template_coords = configuration.get('vision_template_coords')
-	template_margin = configuration.get('vision_template_margin')
-	
-	is_closed, location = vision_service.look_if_closed(template_image, template_coords, template_margin)
-
-	return '{ "closed": %s, "location": [%d, %d] }' % (is_closed, location[0], location[1])
 
 @application.put('/picture_save')
 def picture_save():
