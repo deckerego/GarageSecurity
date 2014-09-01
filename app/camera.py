@@ -7,11 +7,6 @@ class Camera():
 
   def __init__(self):
     self.top_level_url = 'http://localhost:8081'
-    password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
-    password_mgr.add_password(None, self.top_level_url, "user", "pass")
-    handler = urllib2.HTTPBasicAuthHandler(password_mgr)
-    opener = urllib2.build_opener(handler)
-    urllib2.install_opener(opener)
 
   def get_image(self):
     response = urllib2.urlopen(self.top_level_url)
