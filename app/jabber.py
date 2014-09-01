@@ -12,9 +12,10 @@ class Jabber(sleekxmpp.ClientXMPP):
     name = 'jabber_xmpp'
     keyword = 'jabber'
 
-    def __init__(self, jid, password):
+    def __init__(self, jid, password, camera):
         super(Jabber, self).__init__(jid, password)
 
+        self.camera = camera
         self.instance_name = configuration.get('instance_name').lower()
         self.last_alert = None
         self.add_event_handler('session_start', self.start)

@@ -15,12 +15,15 @@ import json
 import time
 import datetime
 from jabber import Jabber
+from camera import Camera
 from config import configuration
-from bottle import Bottle, HTTPResponse, static_file, get, put, request, template
+from bottle import Bottle, HTTPResponse, static_file, get, put, request, response, template
 
 instance_name = configuration.get('instance_name')
 
-jabber_service = Jabber(configuration.get('xmpp_username'), configuration.get('xmpp_password'))
+camera = Camera()
+
+jabber_service = Jabber(configuration.get('xmpp_username'), configuration.get('xmpp_password'), camera)
 
 application = Bottle()
 application.install(jabber_service)
@@ -46,6 +49,11 @@ def dashboard():
 @application.get('/status')
 def show_status():
 	return '{ "last_area_detected": %s }' % last_area_detected
+
+@application.get('/snapshot')
+def show_snapshot():
+	response.headers['Content-Type'] = 'image/jpeg'
+	return camera.get_image()
 
 @application.put('/picture_save')
 def picture_save():
