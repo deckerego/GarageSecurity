@@ -41,7 +41,8 @@ def send_css(filename):
 
 @application.get('/')
 def dashboard():
-	return template('index')
+	print request.headers.get('Cookie')
+	return template('index', webcam_url=configuration.get('webcam_url'))
 
 @application.get('/status')
 def show_status():

@@ -27,7 +27,7 @@
 					</div>
 				</td>
 			</tr>
-		
+
 			<tr>
 				<td class="buttonCell" rowspan="2"><button onClick="executeCommand();">Open or Close Door</button></td>
 				<td class="buttonCell"><button onClick="window.location.assign('/media/');">Video Archives</button></td>
@@ -38,7 +38,7 @@
 		</table>
 
 		<script type="text/javascript">
-			renderCamera("camera0", "/camera0");
+			renderCamera("camera0", "{{webcam_url}}");
 		</script>
 	</body>
 </html>
