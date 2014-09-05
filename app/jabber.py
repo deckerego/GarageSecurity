@@ -70,8 +70,12 @@ class Jabber(sleekxmpp.ClientXMPP):
         self.send_presence()
         self.get_roster()
 
-    def send_recipients(self, body):
-        #FIXME It's rather ridiculous to maintain the last alert timestamp in two places
+    def send_recipients_image(self, file_path):
+        file_bin = open(file_path, 'r').read()
+        file_url = self.bucket.upload(file_bin)
+        self.send_recipients_msg(file_url)
+
+    def send_recipients_msg(self, body):
         self.last_alert = datetime.datetime.now()
 
         message = self.Message()

@@ -8,7 +8,7 @@ PIXELS="$3"
 TIME_EPOCH="$4"
 EVENT_NUMBER="$5"
 
-PUT=`sed s/MOTION_FILE_NAME/$FILE_NAME/ </usr/local/motion/motion.json`
+PUT=`sed 's|MOTION_FILE_NAME|'$FILE_NAME'|g' </usr/local/motion/motion.json`
 PUT=`echo $PUT | sed s/MOTION_PIXELS_DETECTED/$PIXELS/`
 PUT=`echo $PUT | sed s/MOTION_SECONDS_SINCE_EPOCH/$TIME_EPOCH/`
 PUT=`echo $PUT | sed s/MOTION_EVENT_NUMBER/$EVENT_NUMBER/`

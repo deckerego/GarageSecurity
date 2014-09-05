@@ -6,6 +6,7 @@ import sys
 import logging
 
 logging.basicConfig(level=logging.WARN, format='%(levelname)-8s %(message)s')
+logger = logging.getLogger('garagesec')
 
 os.chdir(os.path.dirname(__file__))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), ".")))
@@ -56,11 +57,11 @@ def show_snapshot():
 	return camera.get_image()
 
 @application.put('/picture_save')
-def picture_save():
+def picture_save(jabber):
 	motion_event = request.json
-	date_time = time.localtime(motion_event['event_time'])
-	time_string = time.strftime('%a, %d %b %Y %H:%M:%S', date_time)
 	image_file_path = motion_event['file']
+
+	jabber.send_recipients_image(image_file_path)
 
 	return request.body.getvalue()
 
@@ -84,7 +85,7 @@ def area_detected(jabber):
 	date_time = time.localtime(motion_event['event_time'])
 	time_string = time.strftime('%a, %d %b %Y %H:%M:%S', date_time)
 
-	jabber.send_recipients('Motion in %s Detected at %s' % (instance_name, time_string))
+	jabber.send_recipients_msg('Motion in %s Detected at %s' % (instance_name, time_string))
 
 	return request.body.getvalue()
 

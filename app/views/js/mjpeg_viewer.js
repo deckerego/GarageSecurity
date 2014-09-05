@@ -6,8 +6,14 @@ function renderCamera(canvasId, sourceUrl) {
   image.src = sourceUrl
 
   function drawFrame() {
-    context.drawImage(image, 0, 0, canvas.width, canvas.height);
-    window.requestAnimationFrame(drawFrame);
+    try {
+      context.drawImage(image, 0, 0, canvas.width, canvas.height);
+      window.requestAnimationFrame(drawFrame);
+    } catch(e) {
+      context.font="30px Arial";
+      context.textAlign = "center";
+	    context.fillText("Webcam Not Available", canvas.width / 2, canvas.height / 2);
+    }
   }
 
   drawFrame();
