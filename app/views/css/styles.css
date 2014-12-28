@@ -1,25 +1,58 @@
-button { 
-	background-color: #aaaaaa; 
-	border-radius: 6px; 
-	border: 1px solid #aaaaaa; 
+body {
+	background: linear-gradient(to bottom, #0e0e0e, #7d7e7d, #0e0e0e);
+}
+
+#therm_props {
+	position: absolute;
+	left: 5px;
+	top: 5px;
+}
+
+.prop_overlay {
+	color: white;
+	text-align: left;
+	background-color:rgba(0,0,0,0.25);
+	border-radius: 12px;
+	border: 1px solid #aaaaaa;
+	min-width: 200px;
+	}
+
+button {
+	background-color: #aaaaaa;
+	border-radius: 6px;
+	border: 1px solid #aaaaaa;
 	font-family: Arial;
 	font-size: 15px;
 	font-weight: bold;
 	font-style: normal;
 	min-height: 50px;
-	height: 100%;
-	width: 100%;
 	text-align: center;
 	text-shadow: 1px 1px 0px #aaaaaa;
 }
 
 button:active {
-	background-color:#ff0000; 
+	background-color:#ff0000;
 }
 
-.buttonCell {
-	width: 50%;
-	vertical-align: center;
+#openDoor {
+	position: absolute;
+	left: 5px;
+	bottom: 5px;
+	width: 180px;
+}
+
+#system {
+	position: absolute;
+	left: 190px;
+	bottom: 5px;
+	width: 180px;
+}
+
+#archives {
+	position: absolute;
+	left: 375px;
+	bottom: 5px;
+	width: 180px;
 }
 
 .wrapper {
@@ -29,19 +62,19 @@ button:active {
    height: 100%;
    position: relative;
 }
- 
+
 .container {
    display: table-cell;
    vertical-align: top;
 }
- 
+
 .canvas-container {
    position: relative;
    max-width: 1280px;
    min-width: 640px;
    margin: 0 auto;
 }
- 
+
 #camera0 {
    width: 100%;
    height: auto;

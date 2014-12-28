@@ -6,38 +6,50 @@
 		<script type="text/javascript" src="js/mjpeg_viewer.js"></script>
 		<script type="text/javascript">
 			function executeCommand() {
+				if(window.confirm("Open/Close Garage Door?")) {
+					var request = new XMLHttpRequest();
+					request.open("PUT", "remote/0", true);
+					request.send()
+				}
+			}
+
+			function loadThermals(tempTag, humidTag) {
 				var request = new XMLHttpRequest();
-				request.open("PUT", "remote/0", true);
-				request.send()
+				request.open("GET", "/environment", true);
+
+				request.onload = function(evt) {
+					var response = JSON.parse(request.responseText);
+					document.getElementById(tempTag).innerHTML = response.fahrenheit.toFixed(2) + " &deg;F"
+					document.getElementById(humidTag).innerHTML = response.relative_humidity.toFixed(2) + "%"
+				};
+
+				request.send();
 			}
 		</script>
 	</head>
 
 	<body>
 
-		<table>
-			<tr>
-				<td colspan="2">
-					<div class="wrapper">
-						<div class="container">
-							<div class="canvas-container">
-								<canvas id="camera0" width="1280" height="720"></canvas>
-							</div>
-						</div>
-					</div>
-				</td>
-			</tr>
+		<span class="wrapper">
+			<span class="container">
+				<span class="canvas-container">
+					<canvas id="camera0" width="1280" height="720"></canvas>
+				</span>
+			</span>
 
-			<tr>
-				<td class="buttonCell" rowspan="2"><button onClick="executeCommand();">Open or Close Door</button></td>
-				<td class="buttonCell"><button onClick="window.location.assign('/media/');">Video Archives</button></td>
-			</tr>
-			<tr>
-				<td class="buttonCell"><button onClick="window.location.assign('/monit/');">System Stats</button></td>
-			</tr>
-		</table>
+			<table class="prop_overlay" id="therm_props">
+				<tr><td>Temperature:</td> <td id="temperature" /></tr>
+				<tr><td>Humidity:</td> <td id="humidity" /></tr>
+			</table>
+
+			<button id="openDoor" onClick="executeCommand();">Open or Close Door</button>
+			<button id="archives" onClick="window.location.assign('/media/');">Video Archives</button>
+			<button id="system" onClick="window.location.assign('/monit/');">System Stats</button>
+
+		</span>
 
 		<script type="text/javascript">
+			loadThermals("temperature", "humidity")
 			renderCamera("camera0", "{{webcam_url}}");
 		</script>
 	</body>
