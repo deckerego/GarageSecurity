@@ -38,7 +38,7 @@ See http://hackaday.io/project/2049/instructions for hardware installation
 Software Installation
 ---------------------
 
-1. sudo apt-get install python-distribute python-dev libapache2-mod-wsgi libapache2-mod-proxy-html
+1. sudo apt-get install python-distribute python-dev libapache2-mod-wsgi libapache2-mod-proxy-html libapache2-mod-authnz-external motion
 2. sudo easy_install pip
 3. Clone this repository or download the .ZIP, which will include the Bottle webapp and some admin configs/scripts
 4. Install GarageSecurity's dependencies using pip install -r app/requirements.txt

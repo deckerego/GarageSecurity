@@ -17,16 +17,19 @@ import time
 import datetime
 from jabber import Jabber
 from camera import Camera
+from temperature import Temperature
 from config import configuration
 from bottle import Bottle, HTTPResponse, static_file, get, put, request, response, template
 
 instance_name = configuration.get('instance_name')
 
 camera = Camera()
+temperature = Temperature()
 
 jabber_service = Jabber(configuration.get('xmpp_username'), configuration.get('xmpp_password'), camera)
 
 application = Bottle()
+application.install(temperature)
 application.install(jabber_service)
 
 last_area_detected = None
@@ -50,6 +53,11 @@ def dashboard():
 @application.get('/status')
 def show_status():
 	return '{ "last_area_detected": %s }' % last_area_detected
+
+@application.get('/environment')
+def get_environment(temperature):
+	humidity, celsius, status = temperature.get_conditions()
+	return '{ "relative_humidity": %s, "celsius": %s, "fahrenheit": %s, "status": %s }' % (humidity, celsius, ((celsius * 9) / 5) + 32, status)
 
 @application.get('/snapshot')
 def show_snapshot():
