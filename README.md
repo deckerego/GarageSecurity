@@ -8,8 +8,8 @@ Hardware Punch List
 
 <table>
   <tr>
-    <td>Raspberry Pi Model B</td>
-    <td>https://www.sparkfun.com/products/11546</td>
+    <td>Raspberry Pi (works with all models)</td>
+    <td>https://www.adafruit.com/product/2266</td>
   </tr>
   <tr>
     <td>Raspberry Pi NoIR Camera (or a spare Video4Linux-compliant webcam)</td>
@@ -22,6 +22,10 @@ Hardware Punch List
   <tr>
     <td>Resistors, NPN transistors, NPN MOSFET</td>
     <td>Available at Sparkfun, Adafruit, Radio Shack or from de-soldering unused electronics.</td>
+  </tr>
+  <tr>
+    <td>Optional: Honeywell Temperature and Humidity Sensor</td>
+    <td>https://www.sparkfun.com/products/11295</td>
   </tr>
 </table>
 
