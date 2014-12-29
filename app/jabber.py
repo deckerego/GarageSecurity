@@ -12,10 +12,11 @@ class Jabber(sleekxmpp.ClientXMPP):
   name = 'jabber_xmpp'
   keyword = 'jabber'
 
-  def __init__(self, jid, password, camera):
+  def __init__(self, jid, password, camera, temperature):
     super(Jabber, self).__init__(jid, password)
 
     self.camera = camera
+    self.temperature = temperature
     self.instance_name = configuration.get('instance_name').lower()
     self.last_alert = None
     self.add_event_handler('session_start', self.start)
@@ -100,6 +101,10 @@ class Jabber(sleekxmpp.ClientXMPP):
         message.reply("Status: %s" % image_url).send()
       elif "%s lastevent" % self.instance_name in message['body'].lower():
         message.reply("Last Event: %s" % datetime.fromtimestamp(self.last_alert)).send()
+      elif "%s climate" % self.instance_name in message['body'].lower():
+        humidity, celsius, status = self.temperature.get_conditions()
+        farenheit = ((celsius * 9) / 5) + 32
+        message.reply("Temperature: %0.2fF, Humidity: %0.2f%%" % (farenheit, humidity)).send()
       else:
         print "Uncaught command from %s: %s" % (from_account, message['body'])
         logger.info("Uncaught command from %s: %s" % (from_account, message['body']))

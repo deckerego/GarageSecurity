@@ -26,7 +26,7 @@ instance_name = configuration.get('instance_name')
 camera = Camera()
 temperature = Temperature()
 
-jabber_service = Jabber(configuration.get('xmpp_username'), configuration.get('xmpp_password'), camera)
+jabber_service = Jabber(configuration.get('xmpp_username'), configuration.get('xmpp_password'), camera, temperature)
 
 application = Bottle()
 application.install(temperature)
