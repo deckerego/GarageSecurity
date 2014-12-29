@@ -69,7 +69,7 @@ def picture_save(jabber):
 	motion_event = request.json
 	image_file_path = motion_event['file']
 
-	jabber.send_recipients_image(image_file_path)
+	jabber.send_alert_image(image_file_path)
 
 	return request.body.getvalue()
 
@@ -93,7 +93,7 @@ def area_detected(jabber):
 	date_time = time.localtime(motion_event['event_time'])
 	time_string = time.strftime('%a, %d %b %Y %H:%M:%S', date_time)
 
-	jabber.send_recipients_msg('Motion in %s Detected at %s' % (instance_name, time_string))
+	jabber.send_alert_msg('Motion in %s Detected at %s' % (instance_name, time_string))
 
 	return request.body.getvalue()
 
@@ -103,3 +103,13 @@ def push_remote_button(button):
 		return '{ "pressed": %d }' % button
 	else:
 		raise HTTPResponse('{ "error": %d }' % button, 500)
+
+@application.get('/alerts')
+def get_silence(jabber):
+	return '{ "silence": %s}' % ("true" if jabber.silent else "false")
+
+@application.put('/alerts')
+def set_silence(jabber):
+	silence_request = request.json
+	jabber.set_silence(silence_request['silence'])
+	return get_silence(jabber)
