@@ -100,7 +100,7 @@ class Jabber(sleekxmpp.ClientXMPP):
         image_url = self.bucket.upload(image_bin)
         message.reply("Status: %s" % image_url).send()
       elif "%s lastevent" % self.instance_name in message['body'].lower():
-        message.reply("Last Event: %s" % datetime.fromtimestamp(self.last_alert)).send()
+        message.reply("Last Event: %s" % self.last_alert).send()
       elif "%s climate" % self.instance_name in message['body'].lower():
         humidity, celsius, status = self.temperature.get_conditions()
         farenheit = ((celsius * 9) / 5) + 32
