@@ -19,6 +19,7 @@
 			<table class="prop_overlay" id="therm_props">
 				<tr><td>Temperature:</td> <td id="temperature" /></tr>
 				<tr><td>Humidity:</td> <td id="humidity" /></tr>
+				<tr><td>Last Event:</td> <td id="lastevent" /></tr>
 			</table>
 
 			<button id="openDoor" onClick="executeCommand();">Open or Close Door</button>
@@ -31,6 +32,7 @@
 			loadThermals("temperature", "humidity")
 			renderCamera("camera0", "{{webcam_url}}");
 			silenceStatus("silent");
+			lastEvent("lastevent")
 		</script>
 	</body>
 </html>

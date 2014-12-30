@@ -104,9 +104,13 @@ def push_remote_button(button):
 	else:
 		raise HTTPResponse('{ "error": %d }' % button, 500)
 
+@application.get('/lastevent')
+def get_silence(jabber):
+	return '{ "datetime": "%s" }' % jabber.last_alert
+
 @application.get('/alerts')
 def get_silence(jabber):
-	return '{ "silence": %s}' % ("true" if jabber.silent else "false")
+	return '{ "silence": %s }' % ("true" if jabber.silent else "false")
 
 @application.put('/alerts')
 def set_silence(jabber):

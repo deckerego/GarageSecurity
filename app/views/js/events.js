@@ -18,6 +18,18 @@ function silenceStatus(buttonTag) {
   request.send();
 }
 
+function lastEvent(propTag) {
+  var request = new XMLHttpRequest();
+  request.open("GET", "/lastevent", true);
+
+  request.onload = function(evt) {
+    var response = JSON.parse(request.responseText);
+    document.getElementById(propTag).innerHTML = response.datetime
+  };
+
+  request.send();
+}
+
 function toggleSilence(buttonTag) {
   var request = new XMLHttpRequest();
   request.open("GET", "/alerts", true);
