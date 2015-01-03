@@ -17,7 +17,7 @@ import time
 import datetime
 from jabber import Jabber
 from camera import Camera
-from temperature import Temperature
+from HIH6130 import Temperature
 from config import configuration
 from bottle import Bottle, HTTPResponse, static_file, get, put, request, response, template
 
