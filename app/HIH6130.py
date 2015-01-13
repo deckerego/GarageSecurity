@@ -1,7 +1,11 @@
-#TODO I2C controls for temp/humidity
+I2C = True
+try:
+    import smbus
+except ImportError:
+	I2C = False
+
 import inspect
 import logging
-import smbus
 import time
 from config import configuration
 
@@ -16,9 +20,11 @@ class Temperature(object):
 
     def __init__(self):
         super(Temperature, self).__init__()
-        self.bus = smbus.SMBus(1)
-        self.address = 0x27
-        self.start()
+
+        if I2C:
+            self.bus = smbus.SMBus(1)
+            self.address = 0x27
+            self.start()
 
     def __del__(self):
         self.close()
