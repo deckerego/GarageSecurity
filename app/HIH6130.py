@@ -22,9 +22,14 @@ class Temperature(object):
         super(Temperature, self).__init__()
 
         if I2C:
-            self.bus = smbus.SMBus(1)
-            self.address = 0x27
-            self.start()
+            try:
+                self.bus = smbus.SMBus(1)
+                self.address = 0x27
+                self.start()
+            except IOError:
+                self.bus = None
+                self.address = None
+                logger.error("Could not start I2C bus")
 
     def __del__(self):
         self.close()
@@ -59,19 +64,22 @@ class Temperature(object):
         logger.info("Opening Temperature Connection")
 
     def get_conditions(self):
-        self.bus.write_quick(self.address)
-        time.sleep(0.1)
+        if not self.bus:
+            return (None, None, None)
+        else:
+            self.bus.write_quick(self.address)
+            time.sleep(0.1)
 
-        val = self.bus.read_i2c_block_data(self.address, 0, 4)
+            val = self.bus.read_i2c_block_data(self.address, 0, 4)
 
-        status = val[0] >> 6 # 2 bits for status
-        H_dat = ((val[0] & 0x3f) << 8 )+ val[1] # 14 bits for humidity
-        T_dat = (val[2] << 6) + (val[3] >> 2) # 14 bits for temperature
+            status = val[0] >> 6 # 2 bits for status
+            H_dat = ((val[0] & 0x3f) << 8 )+ val[1] # 14 bits for humidity
+            T_dat = (val[2] << 6) + (val[3] >> 2) # 14 bits for temperature
 
-        humidity = (float(H_dat) / float(self.sensor_max)) * 100
-        celsius = ((float(T_dat) / float(self.sensor_max)) * self.temp_range) + self.temp_min
+            humidity = (float(H_dat) / float(self.sensor_max)) * 100
+            celsius = ((float(T_dat) / float(self.sensor_max)) * self.temp_range) + self.temp_min
 
-        return (humidity, celsius, status)
+            return (humidity, celsius, status)
 
 class PluginError(Exception):
     pass
