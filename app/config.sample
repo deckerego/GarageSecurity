@@ -6,7 +6,7 @@ config_values = {
 		'xmpp_server_port': '5222',
     'xmpp_username': '@gmail.com',
     'xmpp_password': 'password',
-    'xmpp_recipients': '@gmail.com',
+    'xmpp_recipients': ['@gmail.com'],
     'webcam_url': 'http://localhost/camera0',
     'aws_key': 'accesskey',
     'aws_secret': 'secretkey',

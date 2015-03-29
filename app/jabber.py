@@ -82,13 +82,14 @@ class Jabber(sleekxmpp.ClientXMPP):
     self.last_alert = datetime.datetime.now()
 
     if not self.silent:
-      message = self.Message()
-      message['to'] = configuration.get('xmpp_recipients')
-      message['type'] = 'chat'
-      message['body'] = body
+        for recipient in configuration.get('xmpp_recipients'):
+          message = self.Message()
+          message['to'] = recipient
+          message['type'] = 'chat'
+          message['body'] = body
 
-      logger.debug("Sending message: %s" % message)
-      message.send()
+          logger.debug("Sending message: %s" % message)
+          message.send()
 
   def set_silence(self, silent):
       self.silent = silent
