@@ -1,0 +1,3 @@
+check process uv4l matching "uv4l"
+	start "/usr/sbin/service uv4l_raspicam start"
+	stop "/usr/sbin/service uv4l_raspicam stop"
