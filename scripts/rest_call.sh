@@ -1,6 +1,6 @@
 #!/bin/bash
 
-API_URL="http://localhost/$1"
+API_URL="http://localhost/door/$1"
 API_USER=
 API_PASS=
 FILE_NAME="$2"

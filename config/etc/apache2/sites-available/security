@@ -1,44 +1,44 @@
 <VirtualHost *:80>
-	WSGIDaemonProcess security user=www-data group=www-data processes=1 threads=4
-	WSGIScriptAlias / /srv/app/routes.py
+        WSGIDaemonProcess security user=www-data group=www-data processes=1 threads=4
+        WSGIScriptAlias / /srv/garagesec/routes.py
 
-	ServerAdmin webmaster@localhost
+        ServerAdmin webmaster@localhost
 
-	Alias /media /home/motion
+        Alias /media /home/motion
 
-	AddExternalAuth pwauth /usr/sbin/pwauth
-	SetExternalAuthMethod pwauth pipe
+        AddExternalAuth pwauth /usr/sbin/pwauth
+        SetExternalAuthMethod pwauth pipe
 
-	<Directory /srv/app/>
-        	AuthType Basic
+        <Directory /srv/garagesec/>
+                AuthType Basic
                 AuthName "Media Archive"
                 AuthBasicProvider external
                 AuthExternal pwauth
                 Require valid-user
 
-		WSGIProcessGroup security
-        	WSGIApplicationGroup %{GLOBAL}
-	</Directory>
+                WSGIProcessGroup security
+                WSGIApplicationGroup %{RESOURCE}
+        </Directory>
 
-	<Directory /home/motion/>
-		Options Indexes Multiviews
+        <Directory /home/motion/>
+                Options Indexes Multiviews
 
-		AuthType Basic
-		AuthName "Media Archive"
-		AuthBasicProvider external
-		AuthExternal pwauth
-		Require valid-user
-	</Directory>
+                AuthType Basic
+                AuthName "Media Archive"
+                AuthBasicProvider external
+                AuthExternal pwauth
+                Require valid-user
+        </Directory>
 
-	ProxyPass /camera0 http://localhost:8081
+        ProxyPass /camera0 http://localhost:8081
 
-	<Location /camera0>
-		AuthType Basic
+        <Location /camera0>
+                AuthType Basic
                 AuthName "Camera 0"
                 AuthBasicProvider external
                 AuthExternal pwauth
                 Require valid-user
-	</Location>
+        </Location>
 
         ProxyPass /monit http://localhost:2812
 
@@ -50,9 +50,9 @@
                 Require valid-user
         </Location>
 
-	ErrorLog ${APACHE_LOG_DIR}/error.log
+        ErrorLog ${APACHE_LOG_DIR}/error.log
 
-	LogLevel warn
+        LogLevel warn
 
-	CustomLog ${APACHE_LOG_DIR}/access.log combined
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
 </VirtualHost>

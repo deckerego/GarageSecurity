@@ -57,8 +57,11 @@ def show_status():
 @application.get('/environment')
 def get_environment(temperature):
 	humidity, celsius, status = temperature.get_conditions()
-	fahrenheit = ((celsius * 9) / 5) + 32 if celsius else None
-	return '{ "relative_humidity": %s, "celsius": %s, "fahrenheit": %s, "status": %s }' % (humidity, celsius, fahrenheit, status)
+	fahrenheit_val = ((celsius * 9) / 5) + 32 if celsius else "null"
+	celsius_val = celsius if celsius else "null"
+	humidity_val = humidity if humidity else "null"
+	status_val = status if status else "null"
+	return '{ "relative_humidity": %s, "celsius": %s, "fahrenheit": %s, "status": %s }' % (humidity_val, celsius_val, fahrenheit_val, status_val)
 
 @application.get('/snapshot')
 def show_snapshot():
