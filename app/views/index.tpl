@@ -2,9 +2,9 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
-		<link rel="stylesheet" href="css/styles.css?v=1" type="text/css" />
-		<script type="text/javascript" src="js/mjpeg_viewer.js?v=1"></script>
-		<script type="text/javascript" src="js/events.js?v=14"></script>
+		<link rel="stylesheet" href="css/styles.css?v=101" type="text/css" />
+		<script type="text/javascript" src="js/mjpeg_viewer.js?v=101"></script>
+		<script type="text/javascript" src="js/events.js?v=101"></script>
 	</head>
 
 	<body>

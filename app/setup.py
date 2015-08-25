@@ -5,7 +5,7 @@ import os
 
 setup(
     name='GarageSecurity',
-    version='0.1',
+    version='1.0',
     description='A front-end to the Motion subsystem and Raspberry Pi GPIO, used for remote residential garage surveillance.',
     author='DeckerEgo',
     author_email='deckerego@gmail.com',

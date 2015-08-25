@@ -8,7 +8,7 @@ function executeCommand() {
 
 function silenceStatus(buttonTag) {
   var request = new XMLHttpRequest();
-  request.open("GET", "/alerts", true);
+  request.open("GET", "alerts", true);
 
   request.onload = function(evt) {
     var response = JSON.parse(request.responseText);
@@ -20,7 +20,7 @@ function silenceStatus(buttonTag) {
 
 function lastEvent(propTag) {
   var request = new XMLHttpRequest();
-  request.open("GET", "/lastevent", true);
+  request.open("GET", "lastevent", true);
 
   request.onload = function(evt) {
     var response = JSON.parse(request.responseText);
@@ -32,15 +32,15 @@ function lastEvent(propTag) {
 
 function toggleSilence(buttonTag) {
   var request = new XMLHttpRequest();
-  request.open("GET", "/alerts", true);
+  request.open("GET", "alerts", true);
 
   request.onload = function(evt) {
     var response = JSON.parse(request.responseText);
 
     var put = new XMLHttpRequest();
-    put.open("PUT", "/alerts", ! response.silence);
+    put.open("PUT", "alerts", false);
     put.setRequestHeader('Content-Type', 'application/json');
-    put.send(JSON.stringify({ silence: true }));
+    put.send(JSON.stringify({ silence: ! response.silence }));
 
     document.getElementById(buttonTag).innerHTML = response.silence ? "Silence Alerts" : "Enable Alerts";
   };
@@ -50,12 +50,15 @@ function toggleSilence(buttonTag) {
 
 function loadThermals(tempTag, humidTag) {
   var request = new XMLHttpRequest();
-  request.open("GET", "/environment", true);
+  request.open("GET", "environment", true);
 
   request.onload = function(evt) {
     var response = JSON.parse(request.responseText);
-    document.getElementById(tempTag).innerHTML = response.fahrenheit.toFixed(2) + " &deg;F";
-    document.getElementById(humidTag).innerHTML = response.relative_humidity.toFixed(2) + "%";
+    var temperature = response.fahrenheit == null ? "NA" : response.fahrenheit.toFixed(2) + " &deg;F";
+    var humidity = response.relative_humidity == null ? "NA" : response.relative_humidity.toFixed(2) + "%";
+
+    document.getElementById(tempTag).innerHTML = temperature;
+    document.getElementById(humidTag).innerHTML = humidity;
   };
 
   request.send();

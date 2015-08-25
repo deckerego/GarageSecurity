@@ -7,4 +7,4 @@ fi
 
 DEST_HOST=$1
 
-rsync -ave ssh --delete --exclude 'config.py' --exclude '*.pyc' app/ pi@$DEST_HOST:/srv/app/
+rsync -ave ssh --delete --exclude 'config.py' --exclude '*.pyc' app/ pi@$DEST_HOST:/srv/garagesec/
