@@ -55,13 +55,6 @@ button:active {
 	width: 180px;
 }
 
-#system {
-	position: absolute;
-	left: 560px;
-	bottom: 5px;
-	width: 180px;
-}
-
 .wrapper {
    display: table;
    padding: 0;

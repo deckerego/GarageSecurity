@@ -25,7 +25,6 @@
 			<button id="openDoor" onClick="executeCommand();">Open or Close Door</button>
 			<button id="silent" onClick="toggleSilence('silent');">(Un)Set Alerts</button>
 			<button id="archives" onClick="window.location.assign('/media/');">Video Archives</button>
-			<button id="system" onClick="window.location.assign('/monit/');">System Stats</button>
 		</span>
 
 		<script type="text/javascript">
