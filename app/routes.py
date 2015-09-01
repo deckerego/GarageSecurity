@@ -32,11 +32,13 @@ application = Bottle()
 application.install(temperature)
 application.install(jabber_service)
 
-last_area_detected = None
-
 @application.route('/favicon.ico')
 def send_favicon():
 	return static_file('favicon.ico', root='views/images')
+
+@application.route('/installed/<filename:path>')
+def send_bower(filename):
+	return static_file(filename, root='views/bower_components')
 
 @application.route('/js/<filename:path>')
 def send_js(filename):
@@ -52,7 +54,10 @@ def dashboard():
 
 @application.get('/status')
 def show_status():
-	return '{ "last_area_detected": %s }' % last_area_detected
+	archive_dir = configuration.get('webcam_archive')
+	archive_dir = configuration.get('webcam_archive')
+	time_struct = max(map(lambda x: os.path.getmtime("%s/%s" % (archive_dir, x)), os.listdir(archive_dir)))
+	return '{ "last_area_detected": "%s" }' % time.strftime("%c", time.localtime(time_struct))
 
 @application.get('/environment')
 def get_environment(temperature):
@@ -91,8 +96,6 @@ def motion_detected():
 
 @application.put('/area_detected')
 def area_detected(jabber):
-	last_area_detected = datetime.datetime.now()
-
 	motion_event = request.json
 	date_time = time.localtime(motion_event['event_time'])
 	time_string = time.strftime('%a, %d %b %Y %H:%M:%S', date_time)
@@ -109,8 +112,10 @@ def push_remote_button(button):
 		raise HTTPResponse('{ "error": %d }' % button, 500)
 
 @application.get('/lastevent')
-def get_silence(jabber):
-	return '{ "datetime": "%s" }' % jabber.last_alert
+def get_lastevent(jabber):
+	archive_dir = configuration.get('webcam_archive')
+	time_struct = max(map(lambda x: os.path.getmtime("%s/%s" % (archive_dir, x)), os.listdir(archive_dir)))
+	return '{ "datetime": "%s" }' % time.strftime("%c", time.localtime(time_struct))
 
 @application.get('/alerts')
 def get_silence(jabber):

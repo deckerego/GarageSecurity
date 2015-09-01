@@ -7,9 +7,8 @@ except ImportError:
 import inspect
 import logging
 import time
-from config import configuration
 
-logger = logging.getLogger('basemon')
+logger = logging.getLogger('temperature')
 
 class Temperature(object):
     name = 'temperature'
@@ -17,6 +16,8 @@ class Temperature(object):
     sensor_max = 16383
     temp_min = -40
     temp_range = 165
+    bus = None
+    address = None
 
     def __init__(self):
         super(Temperature, self).__init__()
@@ -25,10 +26,7 @@ class Temperature(object):
             try:
                 self.bus = smbus.SMBus(1)
                 self.address = 0x27
-                self.start()
             except IOError:
-                self.bus = None
-                self.address = None
                 logger.error("Could not start I2C bus")
 
     def __del__(self):
@@ -59,9 +57,6 @@ class Temperature(object):
     # De-installation from Bottle as a plugin
     def close(self):
         logger.info("Closing Temperature Connection")
-
-    def start(self):
-        logger.info("Opening Temperature Connection")
 
     def get_conditions(self):
         if not self.bus:
