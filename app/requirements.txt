@@ -1,4 +1,4 @@
-bottle==0.11.6
+bottle>=0.12.0
 nose>=1.1.2
 flexmock==0.9.7
 wiringpi>=1.0.5
