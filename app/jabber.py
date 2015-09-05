@@ -46,7 +46,6 @@ class Jabber(sleekxmpp.ClientXMPP):
       raise Exception("Unable to connect to Google Jabber server")
 
     self.bucket = S3()
-    self.camera = Camera()
 
   # This is invoked within Bottle as part of each route when installed
   def apply(self, callback, context):

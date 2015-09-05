@@ -50,20 +50,23 @@ Software Installation
 
 1. Install the base packages with `sudo apt-get install python-distribute python-dev python-smbus libapache2-mod-wsgi libapache2-mod-proxy-html libapache2-mod-authnz-external motion`
 2. Install the GPIO userspace tools at https://projects.drogon.net/raspberry-pi/wiringpi/download-and-install/
-3. Enable the Apache2 modules using `a2enmod authnz_external proxy_http`
-4. Edit `/etc/default/motion` and set it to start on boot
-5. Motion may crash on startup due to issues with uv4l - if so use the included `config/etc/init.d/motion` script to replace the default init script, so that it can load necessary compatability libraries
-6. Install PIP using `sudo easy_install pip`
-7. Clone this repository or download the .ZIP, which will include the Bottle webapp and some admin configs/scripts
-8. Install GarageSecurity's dependencies using pip install -r app/requirements.txt
-9. Expose the GPIO port you connect the garage door opener to using the WiringPi GPIO Utility, e.g. `gpio export 17 out`. You may want to add this statement to `/etc/rc.local` so that it will be exported at startup.
-10. Allow www-data to access the GPIO port by adding it to the gpio user group in /etc/group
-11. Allow www-data to access to I2C by adding it to the i2c user group in /etc/group
-12. Copy the files within the app/ directory into /srv/app
-13. Copy the service config files from config/etc into the appropriate /etc directory, altering them as needed.
-14. Copy the alert scripts from the `scripts/` directory into `/usr/local/motion`, modifying `rest_call.sh` so that API_USER and API_PASS are set to your "pi" usernamed and password used to log in to Apache
-15. Create a copy of app/config.sample as /srv/app/config.py, altering config.py to fit your preferences
-16. Start up (or restart) Apache2
+3. Install Node.JS as documented at https://learn.adafruit.com/node-embedded-development/installing-node-dot-js
+4. Install Bower using `npm install -g bower`
+5. Enable the Apache2 modules using `a2enmod authnz_external proxy_http`
+6. Edit `/etc/default/motion` and set it to start on boot
+7. Motion may crash on startup due to issues with uv4l - if so use the included `config/etc/init.d/motion` script to replace the default init script, so that it can load necessary compatability libraries
+8. Install PIP using `sudo easy_install pip`
+9. Clone this repository or download the .ZIP, which will include the Bottle webapp and some admin configs/scripts
+10. Install GarageSecurity's dependencies using pip install -r app/requirements.txt
+11. Expose the GPIO port you connect the garage door opener to using the WiringPi GPIO Utility, e.g. `gpio export 17 out`. You may want to add this statement to `/etc/rc.local` so that it will be exported at startup.
+12. Allow www-data to access the GPIO port by adding it to the gpio user group in /etc/group
+13. Allow www-data to access to I2C by adding it to the i2c user group in /etc/group
+14. Copy the files within the app/ directory into /srv/app
+15. Change into the /srv/app/views directory and execute `bower install bootstrap`
+16. Copy the service config files from config/etc into the appropriate /etc directory, altering them as needed.
+17. Copy the alert scripts from the `scripts/` directory into `/usr/local/motion`, modifying `rest_call.sh` so that API_USER and API_PASS are set to your "pi" usernamed and password used to log in to Apache
+18. Create a copy of app/config.sample as /srv/app/config.py, altering config.py to fit your preferences
+19. Start up (or restart) Apache2
 
 GPIO Permissions Issues
 -----------------------
