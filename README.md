@@ -48,7 +48,7 @@ See http://hackaday.io/project/2049/instructions for hardware installation
 Software Installation
 ---------------------
 
-1. Install the base packages with `sudo apt-get install python-distribute python-dev python-smbus libapache2-mod-wsgi libapache2-mod-proxy-html libapache2-mod-authnz-external motion`
+1. Install the base packages with `sudo apt-get install python-distribute python-dev python-smbus libapache2-mod-proxy-html libapache2-mod-authnz-external motion monit`
 2. Install the GPIO userspace tools at https://projects.drogon.net/raspberry-pi/wiringpi/download-and-install/
 3. Install Node.JS as documented at https://learn.adafruit.com/node-embedded-development/installing-node-dot-js
 4. Install Bower using `npm install -g bower`
@@ -67,6 +67,9 @@ Software Installation
 17. Copy the alert scripts from the `scripts/` directory into `/usr/local/motion`, modifying `rest_call.sh` so that API_USER and API_PASS are set to your "pi" usernamed and password used to log in to Apache
 18. Create a copy of app/config.sample as /srv/app/config.py, altering config.py to fit your preferences
 19. Start up (or restart) Apache2
+20. Ensure config/etc/init.d/garagesec has been copied to /etc/init.d, then install it using `update-rc.d garagesec defaults`
+21. Start the webapp using `sudo service garagesec start`
+
 
 GPIO Permissions Issues
 -----------------------
