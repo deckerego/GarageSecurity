@@ -2,6 +2,7 @@ import sleekxmpp
 import inspect
 import logging
 import datetime
+import os, time
 from s3 import S3
 from camera import Camera
 from config import configuration
@@ -18,7 +19,6 @@ class Jabber(sleekxmpp.ClientXMPP):
     self.camera = camera
     self.temperature = temperature
     self.instance_name = configuration.get('instance_name').lower()
-    self.last_alert = None
     self.silent = False
     self.add_event_handler('session_start', self.start)
     self.add_event_handler('message', self.receive)
@@ -46,7 +46,6 @@ class Jabber(sleekxmpp.ClientXMPP):
       raise Exception("Unable to connect to Google Jabber server")
 
     self.bucket = S3()
-    self.camera = Camera()
 
   # This is invoked within Bottle as part of each route when installed
   def apply(self, callback, context):
@@ -79,8 +78,6 @@ class Jabber(sleekxmpp.ClientXMPP):
       self.send_alert_msg(file_url)
 
   def send_alert_msg(self, body):
-    self.last_alert = datetime.datetime.now()
-
     if not self.silent:
         for recipient in configuration.get('xmpp_recipients'):
           message = self.Message()
@@ -107,7 +104,9 @@ class Jabber(sleekxmpp.ClientXMPP):
         image_url = self.bucket.upload(image_bin)
         message.reply("Status: %s" % image_url).send()
       elif "%s lastevent" % self.instance_name in message['body'].lower():
-        message.reply("Last Event: %s" % self.last_alert).send()
+        archive_dir = configuration.get('webcam_archive')
+        time_struct = max(map(lambda x: os.path.getmtime("%s/%s" % (archive_dir, x)), os.listdir(archive_dir)))
+        message.reply("Last Event: %s" % time.strftime("%c", time.localtime(time_struct))).send()
       elif "%s climate" % self.instance_name in message['body'].lower():
         humidity, celsius, status = self.temperature.get_conditions()
         farenheit = ((celsius * 9) / 5) + 32

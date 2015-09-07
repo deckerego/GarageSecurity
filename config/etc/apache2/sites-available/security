@@ -1,7 +1,4 @@
 <VirtualHost *:80>
-        WSGIDaemonProcess security user=www-data group=www-data processes=1 threads=4
-        WSGIScriptAlias / /srv/garagesec/routes.py
-
         ServerAdmin webmaster@localhost
 
         Alias /media /home/motion
@@ -9,16 +6,15 @@
         AddExternalAuth pwauth /usr/sbin/pwauth
         SetExternalAuthMethod pwauth pipe
 
-        <Directory /srv/garagesec/>
+        ProxyPass /door http://localhost:9003
+
+        <Location /door>
                 AuthType Basic
                 AuthName "Media Archive"
                 AuthBasicProvider external
                 AuthExternal pwauth
                 Require valid-user
-
-                WSGIProcessGroup security
-                WSGIApplicationGroup %{RESOURCE}
-        </Directory>
+        </Location>
 
         <Directory /home/motion/>
                 Options Indexes Multiviews

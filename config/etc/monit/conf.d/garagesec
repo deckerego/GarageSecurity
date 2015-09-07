@@ -1,0 +1,5 @@
+check process garagesec with pidfile /var/run/garagesec.pid
+	start "/usr/sbin/service garagesec start"
+	stop "/usr/sbin/service garagesec stop"
+	if failed host localhost port 9003
+	then restart

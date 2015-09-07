@@ -36,3 +36,6 @@ nosetests.xml
 .pydevproject
 
 config.py
+
+# Bower Packages
+bower_components/
