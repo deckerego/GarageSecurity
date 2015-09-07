@@ -8,6 +8,7 @@ from camera import Camera
 from config import configuration
 
 logger = logging.getLogger('garagesec')
+logger.setLevel(20)
 
 class Jabber(sleekxmpp.ClientXMPP):
   name = 'jabber_xmpp'
@@ -20,8 +21,8 @@ class Jabber(sleekxmpp.ClientXMPP):
     self.temperature = temperature
     self.instance_name = configuration.get('instance_name').lower()
     self.silent = False
-    self.add_event_handler('session_start', self.start)
-    self.add_event_handler('message', self.receive)
+    self.add_event_handler('session_start', self.start, threaded=False, disposable=True)
+    self.add_event_handler('message', self.receive, threaded=True, disposable=False)
 
   def __del__(self):
     self.close()
@@ -118,7 +119,6 @@ class Jabber(sleekxmpp.ClientXMPP):
         self.silent = False
         message.reply("Enabling alerts").send()
       else:
-        print "Uncaught command from %s: %s" % (from_account, message['body'])
         logger.info("Uncaught command from %s: %s" % (from_account, message['body']))
 
 class PluginError(Exception):
