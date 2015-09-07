@@ -23,3 +23,7 @@
    height: auto;
    background-color: gray;
 }
+
+.navbar-btn {
+    margin-left: 10px;
+}

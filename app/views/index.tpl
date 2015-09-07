@@ -4,14 +4,17 @@
 		<meta charset="utf-8" />
 		<link rel="stylesheet" href="installed/bootstrap/dist/css/bootstrap.min.css">
 		<link rel="stylesheet" href="installed/bootstrap/dist/css/bootstrap-theme.min.css">
-		<link rel="stylesheet" href="css/styles.css?v=101" type="text/css" />
+		<link rel="stylesheet" href="css/styles.css" type="text/css">
 	</head>
 
 	<body>
 		<nav class="navbar navbar-default">
 			<div class="container-fluid">
 				<ul class="nav navbar-nav">
-					<li class="active"><a href="/">Home</a></li>
+					<li><a class="navbar-brand" href="/">Home</a></li>
+					<li><button type="button" id="openDoor" class="btn btn-default navbar-btn" onClick="executeCommand();">Open or Close Door</button></li>
+					<li><button type="button" id="silent" class="btn btn-default navbar-btn" onClick="toggleSilence('silent');">(Un)Set Alerts</button></li>
+					<li><button type="button" id="archives" class="btn btn-default navbar-btn" onClick="window.location.assign('/media/');">Video Archives</button></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li><p class="navbar-text">Last Event: <span id="lastevent"></span></p></li>
@@ -31,21 +34,10 @@
 		  </div>
 		</div>
 
-
-		<nav class="navbar navbar-default">
-			<div class="container-fluid">
-				<ul class="nav navbar-nav">
-					<li><button type="button" id="openDoor" class="btn btn-default btn-lg navbar-btn" onClick="executeCommand();">Open or Close Door</button></li>
-					<li><button type="button" id="silent" class="btn btn-default btn-lg navbar-btn" onClick="toggleSilence('silent');">(Un)Set Alerts</button></li>
-					<li><button type="button" id="archives" class="btn btn-default btn-lg navbar-btn" onClick="window.location.assign('/media/');">Video Archives</button></li>
-				</ul>
-			</div>
-		</nav>
-
 		<script src="installed/jquery/dist/jquery.min.js"></script>
 		<script src="installed/bootstrap/dist/js/bootstrap.min.js"></script>
-		<script type="text/javascript" src="js/mjpeg_viewer.js?v=101"></script>
-		<script type="text/javascript" src="js/events.js?v=101"></script>
+		<script type="text/javascript" src="js/mjpeg_viewer.js"></script>
+		<script type="text/javascript" src="js/events.js"></script>
 		<script type="text/javascript">
 			loadThermals("temperature", "humidity")
 			renderCamera("camera0", "{{webcam_url}}");
