@@ -61,7 +61,7 @@ class Media(object):
     	archive_dir = configuration.get('webcam_archive')
     	dirpath, dirnames, filenames = next(os.walk(archive_dir))
         archive_dates = filter(lambda f: date_pattern.match(f), dirnames)
-        return sorted(archive_dates)
+        return sorted(archive_dates, reverse=True)
 
     def save_thumbnail(self, file_path):
         filename = os.path.basename(file_path)[:-4]

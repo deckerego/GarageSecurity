@@ -56,12 +56,12 @@ def dashboard():
 
 @application.get('/archive')
 def archive(media):
+	archive_dates = media.get_dates()
 	archive_date = request.query.date
 	if not (archive_date and date_pattern.match(archive_date)):
-		archive_date = datetime.date.today().isoformat()
+		archive_date = archive_dates[0]
 
 	image_files = media.get_files(archive_date)
-	archive_dates = media.get_dates()
 	return template('media', images=image_files, date=archive_date, dates=archive_dates)
 
 @application.get('/status')
