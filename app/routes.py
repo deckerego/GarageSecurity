@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
-import sys
+import os, sys
 import logging
 
 logging.basicConfig(level=logging.WARN, format='%(levelname)-8s %(message)s')
@@ -13,24 +12,27 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "."))
 
 import gpio
 import json
-import time
-import datetime
+import time, datetime
+import re
 from jabber import Jabber
 from camera import Camera
 from HIH6130 import Temperature
+from media import Media
 from config import configuration
 from bottle import Bottle, HTTPResponse, static_file, get, put, request, response, template
 
 instance_name = configuration.get('instance_name')
+date_pattern = re.compile('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
 
 camera = Camera()
 temperature = Temperature()
-
 jabber_service = Jabber(configuration.get('xmpp_username'), configuration.get('xmpp_password'), camera, temperature)
+media = Media()
 
 application = Bottle()
 application.install(temperature)
 application.install(jabber_service)
+application.install(media)
 
 @application.route('/favicon.ico')
 def send_favicon():
@@ -51,6 +53,16 @@ def send_css(filename):
 @application.get('/')
 def dashboard():
 	return template('index', webcam_url=configuration.get('webcam_url'))
+
+@application.get('/archive')
+def archive(media):
+	archive_date = request.query.date
+	if not (archive_date and date_pattern.match(archive_date)):
+		archive_date = datetime.date.today().isoformat()
+
+	image_files = media.get_files(archive_date)
+	archive_dates = media.get_dates()
+	return template('media', images=image_files, date=archive_date, dates=archive_dates)
 
 @application.get('/status')
 def show_status():
@@ -74,11 +86,12 @@ def show_snapshot():
 	return camera.get_image()
 
 @application.put('/picture_save')
-def picture_save(jabber):
+def picture_save(jabber, media):
 	motion_event = request.json
 	image_file_path = motion_event['file']
 
 	jabber.send_alert_image(image_file_path)
+	media.save_thumbnail(image_file_path)
 
 	return request.body.getvalue()
 
@@ -87,7 +100,12 @@ def movie_start():
 	return request.body.getvalue()
 
 @application.put('/movie_end')
-def movie_end():
+def movie_end(media):
+	motion_event = request.json
+	video_file_path = motion_event['file']
+
+	media.transcode(video_file_path)
+
 	return request.body.getvalue()
 
 @application.put('/motion_detected')
