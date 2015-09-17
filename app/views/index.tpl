@@ -14,7 +14,7 @@
 					<li><a class="navbar-brand" href="/">Home</a></li>
 					<li><button type="button" id="openDoor" class="btn btn-default navbar-btn" onClick="executeCommand();">Open or Close Door</button></li>
 					<li><button type="button" id="silent" class="btn btn-default navbar-btn" onClick="toggleSilence('silent');">(Un)Set Alerts</button></li>
-					<li><button type="button" id="archives" class="btn btn-default navbar-btn" onClick="window.location.assign('/media/');">Video Archives</button></li>
+					<li><button type="button" id="archives" class="btn btn-default navbar-btn" onClick="window.location.assign('archive');">Video Archives</button></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li><p class="navbar-text">Last Event: <span id="lastevent"></span></p></li>
