@@ -12,6 +12,10 @@
 			<div class="container-fluid">
 				<ul class="nav navbar-nav">
 					<li><a class="navbar-brand" href="/">Home</a></li>
+					<li class="navbar-brand">/</li>
+					<li><a class="navbar-brand" href="home">Camera</a></li>
+					<li class="navbar-brand">/</li>
+					<li class="navbar-brand">Archive</li>
 				</ul>
         <ul class="nav navbar-nav navbar-right">
 					<div class="btn-group">
@@ -32,7 +36,7 @@
       <div class="row">
         % for archive_image, archive_video in images:
           <div class="col-xs-6 col-md-4">
-            <a href="/media/{{date}}/{{archive_video}}" class="thumbnail">
+            <a href="video?date={{date}}&vid={{archive_video}}" class="thumbnail">
               <img src="/media/{{date}}/{{archive_image}}">
             </a>
           </div>

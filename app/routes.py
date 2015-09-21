@@ -19,10 +19,9 @@ from camera import Camera
 from HIH6130 import Temperature
 from media import Media
 from config import configuration
-from bottle import Bottle, HTTPResponse, static_file, get, put, request, response, template
+from bottle import Bottle, HTTPResponse, static_file, get, put, request, response, template, redirect
 
 instance_name = configuration.get('instance_name')
-date_pattern = re.compile('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
 
 camera = Camera()
 temperature = Temperature()
@@ -51,18 +50,32 @@ def send_css(filename):
 	return static_file(filename, root='views/css')
 
 @application.get('/')
-def dashboard():
+def index():
+	return home()
+
+@application.get('/home')
+def home():
 	return template('index', webcam_url=configuration.get('webcam_url'))
 
 @application.get('/archive')
 def archive(media):
 	archive_dates = media.get_dates()
 	archive_date = request.query.date
-	if not (archive_date and date_pattern.match(archive_date)):
+	if not (archive_date and media.is_valid_date(archive_date)):
 		archive_date = archive_dates[0]
 
 	image_files = media.get_files(archive_date)
 	return template('media', images=image_files, date=archive_date, dates=archive_dates)
+
+@application.get('/video')
+def video(media):
+	video_file = request.query.vid
+	archive_date = request.query.date
+
+	if (not media.is_valid_date(archive_date)) or (not media.is_valid_video(video_file)):
+		return archive(media)
+
+	return template('video', archive_video=video_file, date=archive_date)
 
 @application.get('/status')
 def show_status():
@@ -89,9 +102,12 @@ def show_snapshot():
 def picture_save(jabber, media):
 	motion_event = request.json
 	image_file_path = motion_event['file']
+	image_file_dir = os.path.dirname(image_file_path)
 
 	jabber.send_alert_image(image_file_path)
-	media.save_thumbnail(image_file_path)
+
+	if image_file_dir.index(configuration.get('webcam_archive')) == 0:
+		media.save_thumbnail(image_file_path)
 
 	return request.body.getvalue()
 
@@ -103,8 +119,10 @@ def movie_start():
 def movie_end(media):
 	motion_event = request.json
 	video_file_path = motion_event['file']
+	video_file_dir = os.path.dirname(video_file_path)
 
-	media.transcode(video_file_path)
+	if video_file_dir.index(configuration.get('webcam_archive')) == 0:
+		media.transcode(video_file_path)
 
 	return request.body.getvalue()
 

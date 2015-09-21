@@ -12,6 +12,8 @@
 			<div class="container-fluid">
 				<ul class="nav navbar-nav">
 					<li><a class="navbar-brand" href="/">Home</a></li>
+					<li class="navbar-brand">/</li>
+					<li class="navbar-brand">Camera</li>
 					<li><button type="button" id="openDoor" class="btn btn-default navbar-btn" onClick="executeCommand();">Open or Close Door</button></li>
 					<li><button type="button" id="silent" class="btn btn-default navbar-btn" onClick="toggleSilence('silent');">(Un)Set Alerts</button></li>
 					<li><button type="button" id="archives" class="btn btn-default navbar-btn" onClick="window.location.assign('archive');">Video Archives</button></li>
