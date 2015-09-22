@@ -50,10 +50,10 @@ class Media(object):
     	dirpath, dirnames, filenames = next(os.walk(archive_dir))
 
     	image_files = filter(lambda f: self.is_valid_image(f), filenames)
-        image_files = sorted(image_files, key=lambda f: f[7:10])
+        image_files = sorted(image_files, key=lambda f: f[:6])
 
     	video_files = filter(lambda f: self.is_valid_video(f), filenames)
-        video_files = sorted(video_files, key=lambda f: f[7:10])
+        video_files = sorted(video_files, key=lambda f: f[:6])
 
         # FIXME Undefined behavior if we don't have matching video files for each image file
         return zip(image_files, video_files)

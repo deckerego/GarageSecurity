@@ -17,8 +17,6 @@
         </Location>
 
         <Directory /home/motion/>
-                Options Indexes Multiviews
-
                 AuthType Basic
                 AuthName "Media Archive"
                 AuthBasicProvider external
