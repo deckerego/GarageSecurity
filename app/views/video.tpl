@@ -10,6 +10,10 @@
 	<body>
     <nav class="navbar navbar-default">
 			<div class="container-fluid">
+				<ul class="nav navbar-nav">
+					<li><a class="navbar-brand glyphicon glyphicon-download" aria-hidden="true" href="/media/{{date}}/{{archive_video}}" download></a></li>
+					<li><a class="navbar-brand glyphicon glyphicon-film" aria-hidden="true" href="/media/{{date}}/{{archive_video}}"></a></li>
+        </ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li><a class="navbar-brand glyphicon glyphicon-remove" aria-hidden="true" href="archive?date={{date}}"></a></li>
         </ul>
@@ -17,15 +21,11 @@
     </nav>
 
  		<div class="container-fluid">
-      <div class="well well-lg">
-        <ul class="pager">
-          <li>
-            <video controls>
-              <source src="/media/{{date}}/{{archive_video}}" type="video/mp4">
-            </video>
-          </li>
-        </ul>
-      </div>
+			<div class="embed-responsive embed-responsive-16by9">
+        <video class="embed-responsive-item" autobuffer autoplay controls>
+          <source src="/media/{{date}}/{{archive_video}}">
+        </video>
+			</div>
     </div>
 
 		<script src="installed/jquery/dist/jquery.min.js"></script>

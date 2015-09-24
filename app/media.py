@@ -9,7 +9,7 @@ from config import configuration
 logger = logging.getLogger('media')
 date_pattern = re.compile('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
 image_pattern = re.compile('^[0-9]{6}-[0-9]{2}\.thumb\.jpg$')
-video_pattern = re.compile('^[0-9]{6}-[0-9]{2}\.mp4$')
+video_pattern = re.compile('^[0-9]{6}-[0-9]{2}\.(mp4|ogv|webm)$')
 source_pattern = re.compile('^[0-9]{6}-[0-9]{2}\.(avi|jpg)$')
 
 class Media(object):
@@ -90,10 +90,10 @@ class Media(object):
         sourcefile = os.path.basename(file_path)
         filename = sourcefile[:-4]
         dirname = os.path.dirname(file_path)
-        dest_file = "%s/%s.mp4" % (dirname, filename)
+        dest_file = "%s/%s.webm" % (dirname, filename)
 
         if dirname.index(configuration.get('webcam_archive')) == 0 and self.is_valid_source(sourcefile):
-            subprocess.check_call(["avconv", "-i", file_path, "-vcodec", "h264", "-acodec", "aac", "-strict", "-2", dest_file])
+            subprocess.check_call(["avconv", "-i", file_path, "-vcodec", "vp8", "-an", dest_file])
             os.remove(file_path)
 
     def transcode(self, file_path):
