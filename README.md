@@ -48,26 +48,25 @@ See http://hackaday.io/project/2049/instructions for hardware installation
 Software Installation
 ---------------------
 
-1. Install the base packages with `sudo apt-get install python-distribute python-dev python-smbus python-imaging libapache2-mod-proxy-html libapache2-mod-authnz-external motion monit`
-2. Install the GPIO userspace tools at https://projects.drogon.net/raspberry-pi/wiringpi/download-and-install/
-3. Install Node.JS as documented at https://learn.adafruit.com/node-embedded-development/installing-node-dot-js
-4. Install Bower using `npm install -g bower`
-5. Enable the Apache2 modules using `a2enmod authnz_external proxy_http`
-6. Edit `/etc/default/motion` and set it to start on boot
-7. Motion may crash on startup due to issues with uv4l - if so use the included `config/etc/init.d/motion` script to replace the default init script, so that it can load necessary compatability libraries
-8. Install PIP using `sudo easy_install pip`
-9. Clone this repository or download the .ZIP, which will include the Bottle webapp and some admin configs/scripts
-10. Install GarageSecurity's dependencies using pip install -r app/requirements.txt
-11. Expose the GPIO port you connect the garage door opener to using the WiringPi GPIO Utility, e.g. `gpio export 17 out`. You may want to add this statement to `/etc/rc.local` so that it will be exported at startup.
-12. Allow the pi user to access motion files by adding it to the `motion` user group in /etc/group
-13. Copy the files within the app/ directory into /srv/app
-14. Change into the /srv/app/views directory and execute `bower install bootstrap`
-15. Copy the service config files from config/etc into the appropriate /etc directory, altering them as needed.
-16. Copy the alert scripts from the `scripts/` directory into `/usr/local/motion`, modifying `rest_call.sh` so that API_USER and API_PASS are set to your "pi" usernamed and password used to log in to Apache
-17. Create a copy of app/config.sample as /srv/app/config.py, altering config.py to fit your preferences
-18. Start up (or restart) Apache2
-19. Ensure config/etc/init.d/garagesec has been copied to /etc/init.d, then install it using `update-rc.d garagesec defaults`
-20. Start the webapp using `sudo service garagesec start`
+These installation instructions have been tested with the latest version of Raspian (Jessie)
+
+1. Install the base packages with `sudo apt-get install wiringpi python-dev python-smbus python-imaging apache2 libapache2-mod-proxy-html libapache2-mod-authnz-external motion nodejs-legacy npm monit`
+2. Install Bower using `sudo npm install -g bower`
+3. Enable the Apache2 modules using `sudo a2enmod authnz_external proxy_http`
+4. If you are using the Raspberry Pi camera, add `bcm2835-v4l2` to /etc/modules
+5. Edit `/etc/default/motion` and set it to start on boot
+6. Clone this repository or download https://github.com/deckerego/GarageSecurity/archive/master.zip which will include the Bottle webapp and some admin configs/scripts
+7. Install GarageSecurity's dependencies using `sudo pip install -r app/requirements.txt`
+8. Expose the GPIO port you connect the garage door opener to using the WiringPi GPIO Utility, e.g. `gpio export 17 out`. You may want to add this statement to `/etc/rc.local` so that it will be exported at startup.
+9. Allow the pi user to access motion files by adding it to the `motion` user group in /etc/group
+10. Copy the files within the app/ directory into /srv/garagesec
+11. Change into the /srv/garagesec/views directory and execute `bower install bootstrap`
+12. Copy the service config files from config/etc into the appropriate /etc directory, altering them as needed.
+13. Copy the alert scripts from the `scripts/` directory into `/usr/local/motion`, modifying `rest_call.sh` so that API_USER and API_PASS are set to your "pi" usernamed and password used to log in to Apache
+14. Create a copy of app/config.sample as /srv/garagesec/config.py, altering config.py to fit your preferences
+15. Start up (or restart) Apache2
+16. Ensure config/etc/init.d/garagesec has been copied to /etc/init.d, then install it using `sudo update-rc.d garagesec defaults`
+17. Start the webapp using `sudo service garagesec start`
 
 
 GPIO Permissions Issues
