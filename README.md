@@ -50,7 +50,7 @@ Software Installation
 
 These installation instructions have been tested with the latest version of Raspian (Jessie)
 
-1. Install the base packages with `sudo apt-get install wiringpi python-dev python-smbus python-imaging apache2 libapache2-mod-proxy-html libapache2-mod-authnz-external motion nodejs-legacy npm monit`
+1. Install the base packages with `sudo apt-get install wiringpi python-dev python-smbus python-imaging apache2 libapache2-mod-proxy-html libapache2-mod-authnz-external motion nodejs-legacy libav-tools npm monit`
 2. Install Bower using `sudo npm install -g bower`
 3. Enable the Apache2 modules using `sudo a2enmod authnz_external proxy_http`
 4. If you are using the Raspberry Pi camera, add `bcm2835-v4l2` to /etc/modules
