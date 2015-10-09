@@ -9,7 +9,7 @@ from config import configuration
 logger = logging.getLogger('media')
 date_pattern = re.compile('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
 image_pattern = re.compile('^[0-9]{6}-[0-9]{2}\.thumb\.jpg$')
-video_pattern = re.compile('^[0-9]{6}-[0-9]{2}\.(mp4|ogv|webm)$')
+video_pattern = re.compile('^[0-9]{6}-[0-9]{2}\.(mp4|ogg|webm)$')
 source_pattern = re.compile('^[0-9]{6}-[0-9]{2}\.(avi|jpg)$')
 
 class Media(object):
@@ -85,19 +85,6 @@ class Media(object):
 
     def is_valid_source(self, date):
         return source_pattern.match(date) is not None
-
-    def __threaded_transcode(self, file_path):
-        sourcefile = os.path.basename(file_path)
-        filename = sourcefile[:-4]
-        dirname = os.path.dirname(file_path)
-        dest_file = "%s/%s.webm" % (dirname, filename)
-
-        if dirname.index(configuration.get('webcam_archive')) == 0 and self.is_valid_source(sourcefile):
-            subprocess.check_call(["avconv", "-i", file_path, "-vcodec", "vp8", "-an", dest_file])
-            os.remove(file_path)
-
-    def transcode(self, file_path):
-        thread.start_new_thread(self.__threaded_transcode, (file_path, ))
 
 class PluginError(Exception):
     pass

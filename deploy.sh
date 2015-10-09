@@ -8,4 +8,4 @@ fi
 DEST_HOST=$1
 
 rsync -ave ssh --delete --exclude 'config.py' --exclude '*.pyc' app/ pi@$DEST_HOST:/srv/garagesec/
-ssh pi@$DEST_HOST 'sudo /usr/sbin/service garagesec restart'
+ssh pi@$DEST_HOST 'sudo /usr/bin/monit restart garagesec'
