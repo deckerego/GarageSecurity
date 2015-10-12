@@ -86,6 +86,19 @@ class Media(object):
     def is_valid_source(self, date):
         return source_pattern.match(date) is not None
 
+    def __threaded_transcode(self, file_path):
+        sourcefile = os.path.basename(file_path)
+        filename = sourcefile[:-4]
+        dirname = os.path.dirname(file_path)
+        dest_file = "%s/%s.webm" % (dirname, filename)
+
+        if dirname.index(configuration.get('webcam_archive')) == 0 and self.is_valid_source(sourcefile):
+            subprocess.check_call(["avconv", "-i", file_path, "-vcodec", "vp8", "-an", dest_file])
+            os.remove(file_path)
+
+    def transcode(self, file_path):
+        thread.start_new_thread(self.__threaded_transcode, (file_path, ))
+
 class PluginError(Exception):
     pass
 

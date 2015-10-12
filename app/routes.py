@@ -117,7 +117,13 @@ def movie_start():
 
 @application.put('/movie_end')
 def movie_end(media):
-	# Do nothing (for now)
+	motion_event = request.json
+	video_file_path = motion_event['file']
+	video_file_dir = os.path.dirname(video_file_path)
+
+	if video_file_dir.index(configuration.get('webcam_archive')) == 0:
+		media.transcode(video_file_path)
+
 	return request.body.getvalue()
 
 @application.put('/motion_detected')
