@@ -9,7 +9,7 @@ from config import configuration
 logger = logging.getLogger('media')
 date_pattern = re.compile('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
 image_pattern = re.compile('^[0-9]{6}-[0-9]{2}\.thumb\.jpg$')
-video_pattern = re.compile('^[0-9]{6}-[0-9]{2}\.(mp4|ogv|webm)$')
+video_pattern = re.compile('^[0-9]{6}-[0-9]{2}\.(mp4|ogg|webm)$')
 source_pattern = re.compile('^[0-9]{6}-[0-9]{2}\.(avi|jpg)$')
 
 class Media(object):

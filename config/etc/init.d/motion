@@ -20,7 +20,7 @@
 
 NAME=motion
 PATH_BIN=/bin:/usr/bin:/sbin:/usr/sbin
-DAEMON='/usr/bin/motion'
+DAEMON=/usr/bin/motion
 PIDFILE=/var/run/$NAME.pid
 DEFAULTS=/etc/default/$NAME
 DESC="motion detection daemon"
@@ -54,10 +54,9 @@ case "$1" in
                 mkdir /var/run/motion
         fi
         chown motion:motion /var/run/motion
-        #export LD_PRELOAD=/usr/lib/uv4l/uv4lext/armv6l/libuv4lext.so
-        export LD_PRELOAD=/usr/lib/arm-linux-gnueabihf/libv4l/v4l1compat.so
+	export LD_PRELOAD=/usr/lib/arm-linux-gnueabihf/libv4l/v4l1compat.so
 
-	log_daemon_msg "Starting $DESC" "$NAME" 
+	log_daemon_msg "Starting $DESC" "$NAME"
 if start-stop-daemon --start --oknodo --exec $DAEMON -b --chuid motion ; then
             log_end_msg 0
         else
@@ -103,8 +102,12 @@ if start-stop-daemon --start --oknodo --exec $DAEMON -b --chuid motion ; then
     $0 restart-motion
     ;;
 
+  status)
+    status_of_proc /usr/bin/motion motion
+    ;;
+
   *)
-    echo "Usage: /etc/init.d/$NAME {start|stop|restart|reload}"
+    echo "Usage: /etc/init.d/$NAME {start|stop|restart|reload|status}"
     RET=1
     ;;
 esac
