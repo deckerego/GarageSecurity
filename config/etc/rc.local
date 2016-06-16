@@ -18,5 +18,6 @@ if [ "$_IP" ]; then
 fi
 
 gpio export 17 out
+gpio export 23 out
 
 exit 0

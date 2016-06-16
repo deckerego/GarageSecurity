@@ -6,6 +6,25 @@ function executeCommand() {
   }
 }
 
+function lightSwitch(buttonTag) {
+  var request = new XMLHttpRequest();
+  request.open("PUT", "light/0", true);
+  request.send();
+  lightStatus(buttonTag);
+}
+
+function lightStatus(buttonTag) {
+  var request = new XMLHttpRequest();
+  request.open("GET", "light/0", true);
+
+  request.onload = function(evt) {
+    var response = JSON.parse(request.responseText);
+    document.getElementById(buttonTag).innerHTML = response.enabled ? "Lights Off" : "Lights On";
+  };
+
+  request.send();
+}
+
 function silenceStatus(buttonTag) {
   var request = new XMLHttpRequest();
   request.open("GET", "alerts", true);
