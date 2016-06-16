@@ -57,7 +57,7 @@ These installation instructions have been tested with the latest version of Rasp
 5. Edit `/etc/default/motion` and set it to start on boot
 6. Clone this repository or download https://github.com/deckerego/GarageSecurity/archive/master.zip which will include the Bottle webapp and some admin configs/scripts
 7. Install GarageSecurity's dependencies using `sudo pip install -r app/requirements.txt`
-8. Expose the GPIO port you connect the garage door opener to using the WiringPi GPIO Utility, e.g. `gpio export 17 out`. You may want to add this statement to `/etc/rc.local` so that it will be exported at startup.
+8. Expose any GPIO ports you connect the garage door opener or light switches using the WiringPi GPIO Utility, e.g. `gpio export 17 out`. You may want to add this statement to `/etc/rc.local` so that it will be exported at startup. A sample rc.local is provided.
 9. Allow the pi user to access motion files by adding it to the `motion` user group in /etc/group
 10. Copy the files within the app/ directory into /srv/garagesec
 11. Change into the /srv/garagesec/views directory and execute `bower install bootstrap`

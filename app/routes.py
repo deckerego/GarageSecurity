@@ -147,6 +147,18 @@ def push_remote_button(button):
 	else:
 		raise HTTPResponse('{ "error": %d }' % button, 500)
 
+@application.get('/light/<switch:int>')
+def read_light_switch(switch):
+	state = "true" if gpio.read_switch(switch) else "false"
+	return '{ "enabled": %s }' % state
+
+@application.put('/light/<switch:int>')
+def flip_light_switch(switch):
+	if gpio.flip_switch(switch):
+		return '{ "flipped": %d }' % switch
+	else:
+		raise HTTPResponse('{ "error": %d }' % switch, 500)
+
 @application.get('/lastevent')
 def get_lastevent(jabber):
 	archive_dir = configuration.get('webcam_archive')
