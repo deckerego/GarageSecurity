@@ -3,6 +3,7 @@ import time
 WIRING_PI = True
 try:
 	import wiringpi
+	wiringpi.wiringPiSetupSys()
 except ImportError:
 	WIRING_PI = False
 
@@ -20,12 +21,11 @@ def push_button(button):
 
 	pin = button_pin[button]
 
-	io = wiringpi.GPIO(wiringpi.GPIO.WPI_MODE_SYS)
-	io.pinMode(pin, io.OUTPUT)
-	io.digitalWrite(pin, io.HIGH)
+	wiringpi.pinMode(pin, 1)
+	wiringpi.digitalWrite(pin, 1)
 
 	time.sleep(1)
-	io.digitalWrite(pin, io.LOW)
+	wiringpi.digitalWrite(pin, 0)
 
 	return True
 
@@ -35,9 +35,7 @@ def read_switch(switch):
 
 	pin = switch_pin[switch]
 
-	io = wiringpi.GPIO(wiringpi.GPIO.WPI_MODE_SYS)
-
-	return io.digitalRead(pin) is io.HIGH
+	return wiringpi.digitalRead(pin) > 0
 
 def flip_switch(switch):
 	if not WIRING_PI:
@@ -45,12 +43,11 @@ def flip_switch(switch):
 
 	pin = switch_pin[switch]
 
-	io = wiringpi.GPIO(wiringpi.GPIO.WPI_MODE_SYS)
-	io.pinMode(pin, io.OUTPUT)
+	wiringpi.pinMode(pin, 1)
 
 	if read_switch(switch):
-		io.digitalWrite(pin, io.LOW)
+		wiringpi.digitalWrite(pin, 0)
 	else:
-		io.digitalWrite(pin, io.HIGH)
+		wiringpi.digitalWrite(pin, 1)
 
 	return True

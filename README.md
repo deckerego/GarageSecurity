@@ -64,7 +64,7 @@ These installation instructions have been tested with the latest version of Rasp
 12. Copy the service config files from config/etc into the appropriate /etc directory, altering them as needed.
 13. Copy the alert scripts from the `scripts/` directory into `/usr/local/motion`, modifying `rest_call.sh` so that API_USER and API_PASS are set to your "pi" usernamed and password used to log in to Apache
 14. Create a copy of app/config.sample as /srv/garagesec/config.py, altering config.py to fit your preferences
-15. Start up (or restart) Apache2
+15. Enable the webapp with `sudo a2dissite 000-default`, followed by `sudo a2ensite security`, then start up (or restart) Apache2
 16. Ensure config/etc/init.d/garagesec has been copied to /etc/init.d, then install it using `sudo update-rc.d garagesec defaults`
 17. Start the webapp using `sudo service garagesec start`
 
