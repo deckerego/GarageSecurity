@@ -15,14 +15,19 @@ class Jabber(sleekxmpp.ClientXMPP):
   keyword = 'jabber'
 
   def __init__(self, jid, password, camera, temperature):
-    super(Jabber, self).__init__(jid, password)
+    if jid and password:
+        super(Jabber, self).__init__(jid, password)
 
     self.camera = camera
     self.temperature = temperature
-    self.instance_name = configuration.get('instance_name').lower()
-    self.silent = False
-    self.add_event_handler('session_start', self.start, threaded=False, disposable=True)
-    self.add_event_handler('message', self.receive, threaded=True, disposable=False)
+    self.instance_name = None
+    self.silent = True
+
+    if jid and password:
+        self.silent = False
+        self.instance_name = configuration.get('instance_name').lower()
+        self.add_event_handler('session_start', self.start, threaded=False, disposable=True)
+        self.add_event_handler('message', self.receive, threaded=True, disposable=False)
 
   def __del__(self):
     self.close()
@@ -39,6 +44,10 @@ class Jabber(sleekxmpp.ClientXMPP):
 
     host = configuration.get('xmpp_server_host')
     port = configuration.get('xmpp_server_port')
+
+    if not host and not port:
+        logger.warn("No XMPP settings defined, disabling Jabber")
+        return
 
     if self.connect((host, port)):
       logger.info("Opened XMPP Connection")
