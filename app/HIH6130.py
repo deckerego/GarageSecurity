@@ -59,9 +59,14 @@ class Temperature(object):
         logger.info("Closing Temperature Connection")
 
     def get_conditions(self):
+        humidity = None
+        celsius = None
+        status = None
+
         if not self.bus:
             return (None, None, None)
-        else:
+
+        try:
             self.bus.write_quick(self.address)
             time.sleep(0.1)
 
@@ -73,8 +78,10 @@ class Temperature(object):
 
             humidity = (float(H_dat) / float(self.sensor_max)) * 100
             celsius = ((float(T_dat) / float(self.sensor_max)) * self.temp_range) + self.temp_min
+        except IOError:
+            logger.error("Could not fetch conditions over I2C")
 
-            return (humidity, celsius, status)
+        return (humidity, celsius, status)
 
 class PluginError(Exception):
     pass
