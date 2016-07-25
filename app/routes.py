@@ -10,10 +10,10 @@ logger = logging.getLogger('garagesec')
 os.chdir(os.path.dirname(__file__))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), ".")))
 
-import gpio
 import json
 import time, datetime
 import re
+from piwiring import GPIO
 from jabber import Jabber
 from camera import Camera
 from HIH6130 import Temperature
@@ -25,11 +25,13 @@ instance_name = configuration.get('instance_name')
 
 camera = Camera()
 temperature = Temperature()
+gpio = GPIO()
 jabber_service = Jabber(configuration.get('xmpp_username'), configuration.get('xmpp_password'), camera, temperature)
 media = Media()
 
 application = Bottle()
 application.install(temperature)
+application.install(gpio)
 application.install(jabber_service)
 application.install(media)
 
@@ -141,19 +143,19 @@ def area_detected(jabber):
 	return request.body.getvalue()
 
 @application.put('/remote/<button:int>')
-def push_remote_button(button):
+def push_remote_button(button, gpio):
 	if gpio.push_button(button):
 		return '{ "pressed": %d }' % button
 	else:
 		raise HTTPResponse('{ "error": %d }' % button, 500)
 
 @application.get('/light/<switch:int>')
-def read_light_switch(switch):
+def read_light_switch(switch, gpio):
 	state = "true" if gpio.read_switch(switch) else "false"
 	return '{ "enabled": %s }' % state
 
 @application.put('/light/<switch:int>')
-def flip_light_switch(switch):
+def flip_light_switch(switch, gpio):
 	if gpio.flip_switch(switch):
 		return '{ "flipped": %d }' % switch
 	else:
