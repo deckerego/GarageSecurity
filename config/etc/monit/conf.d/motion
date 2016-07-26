@@ -1,3 +1,5 @@
 check process motion with pidfile /var/run/motion/motion.pid
 	start "/usr/sbin/service motion restart"
 	stop "/usr/sbin/service motion stop"
+	if failed host localhost port 8081 protocol HTTP
+	then restart
