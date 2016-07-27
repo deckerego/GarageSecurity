@@ -15,17 +15,15 @@ class Jabber(sleekxmpp.ClientXMPP):
   keyword = 'jabber'
 
   def __init__(self, jid, password, camera, temperature):
-    if jid and password:
-        super(Jabber, self).__init__(jid, password)
+    super(Jabber, self).__init__(jid, password)
 
     self.camera = camera
     self.temperature = temperature
-    self.instance_name = None
+    self.instance_name = configuration.get('instance_name').lower()
     self.silent = True
 
     if jid and password:
         self.silent = False
-        self.instance_name = configuration.get('instance_name').lower()
         self.add_event_handler('session_start', self.start, threaded=False, disposable=True)
         self.add_event_handler('message', self.receive, threaded=True, disposable=False)
 
@@ -45,17 +43,16 @@ class Jabber(sleekxmpp.ClientXMPP):
     host = configuration.get('xmpp_server_host')
     port = configuration.get('xmpp_server_port')
 
-    if not host and not port:
+    if not host or not port:
         logger.warn("No XMPP settings defined, disabling Jabber")
-        return
-
-    if self.connect((host, port)):
-      logger.info("Opened XMPP Connection")
-      self.process(block=False)
     else:
-      raise Exception("Unable to connect to Google Jabber server")
+        if self.connect((host, port)):
+          logger.info("Opened XMPP Connection")
+          self.process(block=False)
+        else:
+          raise Exception("Unable to connect to Google Jabber server")
 
-    self.bucket = S3()
+        self.bucket = S3()
 
   # This is invoked within Bottle as part of each route when installed
   def apply(self, callback, context):
