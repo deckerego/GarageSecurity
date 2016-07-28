@@ -1,14 +1,14 @@
 import argparse
 
 config_values = {
-		'instance_name': 'Garage',
-		'xmpp_server_host': 'talk.google.com',
-		'xmpp_server_port': '5222',
+    'instance_name': 'Garage',
+    'xmpp_server_host': 'talk.google.com',
+    'xmpp_server_port': '5222',
     'xmpp_username': '@gmail.com',
     'xmpp_password': 'password',
     'xmpp_recipients': ['@gmail.com'],
-    'webcam_url': 'http://localhost/camera0',
-		'webcam_archive': '/home/motion',
+    'webcam_url': '/camera0',
+    'webcam_archive': '/home/motion',
     'aws_key': 'accesskey',
     'aws_secret': 'secretkey',
     's3_bucket': 'bucketname',
