@@ -14,7 +14,8 @@
 					<li><a class="navbar-brand" href="/">Home</a></li>
 					<li class="navbar-brand">/</li>
 					<li class="navbar-brand">Camera</li>
-					<li><button type="button" id="openDoor" class="btn btn-default navbar-btn" onClick="executeCommand();">Open or Close Door</button></li>
+					<li><button type="button" id="openDoor" class="btn btn-default navbar-btn" onClick="pressButton(0);">Open or Close Door #1</button></li>
+					<li><button type="button" id="openDoor" class="btn btn-default navbar-btn" onClick="pressButton(1);">Open or Close Door #2</button></li>
 					<li><button type="button" id="flipLight" class="btn btn-default navbar-btn" onClick="lightSwitch('flipLight');">Turn On/Off Light</button></li>
 					<li><button type="button" id="silent" class="btn btn-default navbar-btn" onClick="toggleSilence('silent');">(Un)Set Alerts</button></li>
 					<li><button type="button" id="archives" class="btn btn-default navbar-btn" onClick="window.location.assign('archive');">Video Archives</button></li>

@@ -18,6 +18,7 @@ class GPIO(object):
     initialized = False
     button_pin = {
         0: 17
+        1: 27
     }
     switch_pin = {
         0: 23

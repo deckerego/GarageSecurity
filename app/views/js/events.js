@@ -1,7 +1,7 @@
-function executeCommand() {
+function pressButton(buttonNumber) {
   if(window.confirm("Open/Close Garage Door?")) {
     var request = new XMLHttpRequest();
-    request.open("PUT", "remote/0", true);
+    request.open("PUT", "remote/" + buttonNumber, true);
     request.send();
   }
 }
